@@ -22,5 +22,9 @@ dependencyResolutionManagement {
     }
 }
 
+<<<<<<< HEAD
 rootProject.name = "Network Music Player"
+=======
+rootProject.name = "Network Music Player"
+>>>>>>> db4f275 (Basic version of app, can move between home and file manager)
 include(":app")
