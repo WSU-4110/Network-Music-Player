@@ -31,6 +31,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NetworkMusicPlayerTheme {
+                 Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                )
                 MusicPlayerApp()
             }
         }
