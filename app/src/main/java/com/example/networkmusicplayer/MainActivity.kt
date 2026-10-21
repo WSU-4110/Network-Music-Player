@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
 
     //temporary
     val songUri = Uri.parse("android.resource://NetworkMusicPlayer/raw/dirty_harry.flac")
-    private val player = ExoPlayer.Builder(this).build()
+    private val player by lazy { ExoPlayer.Builder(this).build() }
     private val mediaItem = MediaItem.fromUri(songUri)
 
     fun playSong() {
@@ -53,6 +53,11 @@ class MainActivity : ComponentActivity() {
 
     fun pauseSong() {
         player.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        player.release()
     }
 }
 
