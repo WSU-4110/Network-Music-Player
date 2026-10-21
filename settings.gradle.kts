@@ -22,5 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
+
 rootProject.name = "Network Music Player"
 include(":app")
