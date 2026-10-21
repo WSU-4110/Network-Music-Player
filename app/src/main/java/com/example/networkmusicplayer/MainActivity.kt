@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -24,6 +25,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 import com.example.networkmusicplayer.R
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.common.MediaItem
+import android.net.Uri
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,15 +35,30 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NetworkMusicPlayerTheme {
-                MusicPlayerApp()
+                MusicPlayerApp(onPlaySong = { playSong() }, onPauseSong = { pauseSong() })
             }
         }
+    }
+
+    //temporary
+    val songUri = Uri.parse("android.resource://NetworkMusicPlayer/raw/dirty_harry.flac")
+    private val player = ExoPlayer.Builder(this).build()
+    private val mediaItem = MediaItem.fromUri(songUri)
+
+    fun playSong() {
+        player.setMediaItem(mediaItem)
+        player.prepare()
+        player.play()
+    }
+
+    fun pauseSong() {
+        player.pause()
     }
 }
 
 @PreviewScreenSizes
 @Composable
-fun MusicPlayerApp() {
+fun MusicPlayerApp(onPlaySong: () -> Unit = {}, onPauseSong: () -> Unit = {}) {
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
 
     NavigationSuiteScaffold(
@@ -62,7 +81,7 @@ fun MusicPlayerApp() {
         //swap between the two screens
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
             when (currentDestination) {
-                AppDestinations.HOME -> HomeScreen(modifier = Modifier.padding(innerPadding))
+                AppDestinations.HOME -> HomeScreen(modifier = Modifier.padding(innerPadding), onPlayClick = onPlaySong, onPauseClick = onPauseSong)
                 AppDestinations.FILES -> FileScreen(modifier = Modifier.padding(innerPadding))
             }
         }
@@ -70,7 +89,7 @@ fun MusicPlayerApp() {
 }
 //home screen for playing music and such
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(modifier: Modifier = Modifier, onPlayClick: () -> Unit, onPauseClick: () -> Unit) {
 //pad to center
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -82,9 +101,19 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         SongTitle(
             songName = "None",
         )
-        //play button
-        Button(onClick = { playSong() }) {
-            Text("Play")
+
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            //play button
+            Button(onClick = onPlayClick) {
+                Text("Play")
+            }
+            Button(onClick = onPauseClick) {
+                Text("Pause")
+            }
         }
     }
 }
@@ -98,9 +127,6 @@ fun FileScreen(modifier: Modifier = Modifier) {
     ) {
         Text("put files here :)")
     }
-}
-fun playSong() {
-//function for play button to play song
 }
 
 //buttons for swapping between the two screens
