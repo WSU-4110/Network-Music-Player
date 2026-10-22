@@ -45,6 +45,8 @@ fun MiniPlayer(
     isPlaying: Boolean,
     progressMs: Long,
     onPlayPauseClick: () -> Unit,
+    onPlayClick: () -> Unit,
+    onPauseClick: () -> Unit,
     onNextClick: () -> Unit,
     onPlayerExpand: () -> Unit,
     modifier: Modifier = Modifier
@@ -113,13 +115,16 @@ fun MiniPlayer(
 
                 // Controls
                 IconButton(
-                    onClick = onPlayPauseClick,
+                    //onClick = onPlayPauseClick,
+                    onClick = {
+                        if (isPlaying) {onPauseClick()} else {onPlayClick()}
+                        onPlayPauseClick() },
                     modifier = Modifier
                         .size(38.dp)
                         .background(MaterialTheme.colorScheme.primaryContainer, CircleShape)
                 ) {
                     Icon(
-                        imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
+                        imageVector = if (isPlaying) {Icons.Default.Pause} else Icons.Default.PlayArrow,
                         contentDescription = if (isPlaying) "Pause" else "Play",
                         tint = MaterialTheme.colorScheme.onPrimaryContainer,
                         modifier = Modifier.size(22.dp)
@@ -163,6 +168,8 @@ fun MiniPlayerPreview() {
             isPlaying = true,
             progressMs = 60000L,
             onPlayPauseClick = {},
+            onPlayClick = {},
+            onPauseClick = {},
             onNextClick = {},
             onPlayerExpand = {}
         )

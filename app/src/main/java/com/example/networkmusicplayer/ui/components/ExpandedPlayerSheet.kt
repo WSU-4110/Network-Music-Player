@@ -90,7 +90,9 @@ fun ExpandedPlayerSheet(
     onVolumeChange: (Float) -> Unit,
     onQueueClick: () -> Unit,
     onEqualizerClick: () -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onPlayClick: () -> Unit,
+    onPauseClick: () -> Unit
 ) {
     if (track == null) return
 
@@ -367,7 +369,9 @@ fun ExpandedPlayerSheet(
 
                     // Play / Pause Main Container Button
                     IconButton(
-                        onClick = onPlayPauseClick,
+                        onClick = {
+                            if (isPlaying) {onPauseClick()} else {onPlayClick()}
+                            onPlayPauseClick() },
                         modifier = Modifier
                             .size(68.dp)
                             .background(MaterialTheme.colorScheme.primary, CircleShape)
@@ -467,7 +471,9 @@ fun ExpandedPlayerSheetPreview() {
             onVolumeChange = {},
             onQueueClick = {},
             onEqualizerClick = {},
-            onDismiss = {}
+            onDismiss = {},
+            onPlayClick = {},
+            onPauseClick = {},
         )
     }
 }

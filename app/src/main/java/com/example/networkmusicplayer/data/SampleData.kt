@@ -35,10 +35,10 @@ object SampleData {
     val sampleTracks = listOf(
         Track(
             id = "t1",
-            title = "Midnight Horizon",
-            artist = "Acoustic Reverie",
-            album = "Starlight Sessions",
-            durationMs = 215000L,
+            title = "Dirty Harry",
+            artist = "Gorillaz",
+            album = "Demon Days",
+            durationMs = 230000L,
             coverColor = Color(0xFF673AB7),
             isNetworkTrack = true,
             sourceUrl = "http://192.168.1.120/Music/Midnight_Horizon.flac",

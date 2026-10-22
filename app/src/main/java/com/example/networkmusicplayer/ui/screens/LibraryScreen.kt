@@ -47,6 +47,8 @@ fun LibraryScreen(
     onTrackSelect: (Track) -> Unit,
     onFavoriteToggle: (String) -> Unit,
     onPlayAll: () -> Unit,
+    isPlaying: Boolean,
+    onPlayClick: () -> Unit,
     onShuffleAll: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -96,7 +98,9 @@ fun LibraryScreen(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Button(
-                onClick = onPlayAll,
+                onClick = {
+                    onPlayClick()
+                    onPlayAll() },
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
@@ -172,7 +176,9 @@ fun LibraryScreenPreview() {
             onTrackSelect = {},
             onFavoriteToggle = {},
             onPlayAll = {},
-            onShuffleAll = {}
+            onShuffleAll = {},
+            isPlaying = true,
+            onPlayClick = {}
         )
     }
 }

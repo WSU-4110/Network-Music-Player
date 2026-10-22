@@ -11,22 +11,46 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.networkmusicplayer.ui.NetworkMusicPlayerApp
 import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.datasource.RawResourceDataSource
+import android.net.Uri
 
 class MainActivity : ComponentActivity() {
+
+    private var player: ExoPlayer? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             NetworkMusicPlayerTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                NetworkMusicPlayerApp(onPlaySong = { playSong() }, onPauseSong = { pauseSong() })
             }
         }
+        //Initialize ExoPlayer
+        player = ExoPlayer.Builder(this).build()
+
+        // Load a set song from res/raw (temporary)
+        val uri = Uri.parse("android.resource://$packageName/${R.raw.dirty_harry}")
+        player?.setMediaItem(MediaItem.fromUri(uri))
+        player?.prepare()
+    }
+    private fun playSong() {
+        player?.play()
+    }
+
+    fun pauseSong() {
+        player?.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        player?.release()
+        player = null
     }
 }
 

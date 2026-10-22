@@ -41,7 +41,9 @@ import com.example.networkmusicplayer.viewmodel.MusicPlayerViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NetworkMusicPlayerApp(
-    viewModel: MusicPlayerViewModel = viewModel()
+    viewModel: MusicPlayerViewModel = viewModel(),
+    onPlaySong: () -> Unit = {},
+    onPauseSong: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -68,6 +70,8 @@ fun NetworkMusicPlayerApp(
                     isPlaying = uiState.isPlaying,
                     progressMs = uiState.progressMs,
                     onPlayPauseClick = { viewModel.togglePlayPause() },
+                    onPlayClick = onPlaySong,
+                    onPauseClick = onPauseSong,
                     onNextClick = { viewModel.skipToNext() },
                     onPlayerExpand = { viewModel.setExpandedPlayerVisible(true) }
                 )
@@ -122,6 +126,8 @@ fun NetworkMusicPlayerApp(
                 NavTab.LIBRARY -> LibraryScreen(
                     tracks = uiState.allTracks,
                     currentTrack = uiState.currentTrack,
+                    isPlaying = uiState.isPlaying,
+                    onPlayClick = onPlaySong,
                     activeFilter = uiState.libraryFilter,
                     onFilterSelect = { viewModel.setLibraryFilter(it) },
                     onTrackSelect = { viewModel.playTrack(it) },
@@ -176,7 +182,9 @@ fun NetworkMusicPlayerApp(
             onVolumeChange = { viewModel.setVolume(it) },
             onQueueClick = { viewModel.setQueueSheetVisible(true) },
             onEqualizerClick = { viewModel.setEqualizerSheetVisible(true) },
-            onDismiss = { viewModel.setExpandedPlayerVisible(false) }
+            onDismiss = { viewModel.setExpandedPlayerVisible(false) },
+            onPlayClick = onPlaySong,
+            onPauseClick = onPauseSong
         )
     }
 
