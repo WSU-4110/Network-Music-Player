@@ -28,15 +28,23 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NetworkMusicPlayerTheme {
-                NetworkMusicPlayerApp(onPlaySong = { playSong() }, onPauseSong = { pauseSong() })
+                NetworkMusicPlayerApp(
+                    onPlaySong = { playSong() },
+                    onPauseSong = { pauseSong() },
+                    onNextSong = { nextSong() },
+                    onPrevSong = { prevSong() })
             }
         }
         //Initialize ExoPlayer
         player = ExoPlayer.Builder(this).build()
 
         // Load a set song from res/raw (temporary)
-        val uri = Uri.parse("android.resource://$packageName/${R.raw.dirty_harry}")
-        player?.setMediaItem(MediaItem.fromUri(uri))
+        val uris: List<Uri> = listOf(
+            Uri.parse("android.resource://$packageName/${R.raw.dirty_harry}"),
+            Uri.parse("android.resource://$packageName/${R.raw.feel_good_inc}")
+        )
+
+        player?.setMediaItems(uris.map {MediaItem.fromUri(it)})
         player?.prepare()
     }
     private fun playSong() {
@@ -45,6 +53,14 @@ class MainActivity : ComponentActivity() {
 
     fun pauseSong() {
         player?.pause()
+    }
+
+    fun nextSong() {
+        player?.seekToNextMediaItem()
+    }
+
+    fun prevSong() {
+        player?.seekToPreviousMediaItem()
     }
 
     override fun onDestroy() {

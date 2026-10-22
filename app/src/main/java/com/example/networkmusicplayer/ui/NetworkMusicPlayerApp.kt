@@ -43,7 +43,9 @@ import com.example.networkmusicplayer.viewmodel.MusicPlayerViewModel
 fun NetworkMusicPlayerApp(
     viewModel: MusicPlayerViewModel = viewModel(),
     onPlaySong: () -> Unit = {},
-    onPauseSong: () -> Unit = {}
+    onPauseSong: () -> Unit = {},
+    onNextSong: () -> Unit = {},
+    onPrevSong: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -72,7 +74,7 @@ fun NetworkMusicPlayerApp(
                     onPlayPauseClick = { viewModel.togglePlayPause() },
                     onPlayClick = onPlaySong,
                     onPauseClick = onPauseSong,
-                    onNextClick = { viewModel.skipToNext() },
+                    onNextClick = { viewModel.skipToNext(); onNextSong() },
                     onPlayerExpand = { viewModel.setExpandedPlayerVisible(true) }
                 )
 
@@ -173,8 +175,8 @@ fun NetworkMusicPlayerApp(
             isShuffleEnabled = uiState.isShuffleEnabled,
             repeatMode = uiState.repeatMode,
             onPlayPauseClick = { viewModel.togglePlayPause() },
-            onNextClick = { viewModel.skipToNext() },
-            onPreviousClick = { viewModel.skipToPrevious() },
+            onNextClick = { viewModel.skipToNext(); onNextSong() },
+            onPreviousClick = { viewModel.skipToPrevious(); onPrevSong() },
             onSeek = { viewModel.seekTo(it) },
             onShuffleToggle = { viewModel.toggleShuffle() },
             onRepeatToggle = { viewModel.toggleRepeat() },

@@ -47,16 +47,16 @@ object SampleData {
         ),
         Track(
             id = "t2",
-            title = "Cybernetic Pulse",
-            artist = "Synthwave Collective",
-            album = "Neon Grid 2088",
+            title = "Feel Good Inc",
+            artist = "Gorillaz",
+            album = "Demon Days",
             durationMs = 184000L,
             coverColor = Color(0xFFE91E63),
             isNetworkTrack = false,
             sourceUrl = null,
             isFavorite = false,
             bitrate = "320 kbps MP3"
-        ),
+        ) /*
         Track(
             id = "t3",
             title = "Ocean Waves & Chill",
@@ -116,6 +116,6 @@ object SampleData {
             sourceUrl = "http://192.168.1.120/Music/Velvet_Evening_Jazz.flac",
             isFavorite = true,
             bitrate = "FLAC 16-bit / 44.1kHz"
-        )
+        ) */
     )
 }
