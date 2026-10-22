@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.networkmusicplayer.data.SampleData
 import com.example.networkmusicplayer.model.NetworkServer
-import com.example.networkmusicplayer.ui.theme.TemplateAppTheme
+import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 
 @Composable
 fun NetworkServerCard(
@@ -147,7 +147,7 @@ fun NetworkServerCard(
 @Preview(showBackground = true)
 @Composable
 fun NetworkServerCardPreview() {
-    TemplateAppTheme {
+    NetworkMusicPlayerTheme {
         NetworkServerCard(
             server = SampleData.sampleServers.first(),
             onToggleConnection = {}

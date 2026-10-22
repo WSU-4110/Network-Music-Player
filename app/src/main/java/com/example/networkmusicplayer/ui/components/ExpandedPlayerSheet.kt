@@ -69,7 +69,7 @@ import com.example.networkmusicplayer.model.Track
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.networkmusicplayer.data.SampleData
-import com.example.networkmusicplayer.ui.theme.TemplateAppTheme
+import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -449,7 +449,7 @@ fun ExpandedPlayerSheet(
 @Preview(showBackground = true)
 @Composable
 fun ExpandedPlayerSheetPreview() {
-    TemplateAppTheme {
+    NetworkMusicPlayerTheme {
         ExpandedPlayerSheet(
             track = SampleData.sampleTracks.first(),
             isPlaying = true,

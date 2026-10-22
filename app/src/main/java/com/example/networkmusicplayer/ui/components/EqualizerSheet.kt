@@ -35,7 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.networkmusicplayer.ui.theme.TemplateAppTheme
+import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -218,7 +218,7 @@ fun EqualizerSheet(
 @Preview(showBackground = true)
 @Composable
 fun EqualizerSheetPreview() {
-    TemplateAppTheme {
+    NetworkMusicPlayerTheme {
         EqualizerSheet(
             activePreset = "Bass Boost",
             bassBoost = 0.75f,

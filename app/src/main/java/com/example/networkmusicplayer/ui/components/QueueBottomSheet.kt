@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.networkmusicplayer.data.SampleData
 import com.example.networkmusicplayer.model.Track
-import com.example.networkmusicplayer.ui.theme.TemplateAppTheme
+import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -177,7 +177,7 @@ fun QueueBottomSheet(
 @Preview(showBackground = true)
 @Composable
 fun QueueBottomSheetPreview() {
-    TemplateAppTheme {
+    NetworkMusicPlayerTheme {
         QueueBottomSheet(
             queue = SampleData.sampleTracks,
             currentQueueIndex = 0,

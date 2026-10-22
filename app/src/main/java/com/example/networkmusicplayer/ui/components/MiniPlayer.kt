@@ -37,7 +37,7 @@ import com.example.networkmusicplayer.model.Track
 
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.networkmusicplayer.data.SampleData
-import com.example.networkmusicplayer.ui.theme.TemplateAppTheme
+import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 
 @Composable
 fun MiniPlayer(
@@ -157,7 +157,7 @@ fun MiniPlayer(
 @Preview(showBackground = true)
 @Composable
 fun MiniPlayerPreview() {
-    TemplateAppTheme {
+    NetworkMusicPlayerTheme {
         MiniPlayer(
             track = SampleData.sampleTracks.first(),
             isPlaying = true,

@@ -30,7 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.networkmusicplayer.data.SampleData
 import com.example.networkmusicplayer.model.Track
 import com.example.networkmusicplayer.ui.components.TrackListItem
-import com.example.networkmusicplayer.ui.theme.TemplateAppTheme
+import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 
 @Composable
 fun SearchScreen(
@@ -143,7 +143,7 @@ fun SearchScreen(
 @Preview(showBackground = true)
 @Composable
 fun SearchScreenPreview() {
-    TemplateAppTheme {
+    NetworkMusicPlayerTheme {
         SearchScreen(
             tracks = SampleData.sampleTracks,
             currentTrack = SampleData.sampleTracks.first(),

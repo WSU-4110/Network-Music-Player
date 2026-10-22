@@ -38,7 +38,7 @@ import java.util.Locale
 
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.networkmusicplayer.data.SampleData
-import com.example.networkmusicplayer.ui.theme.TemplateAppTheme
+import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 
 @Composable
 fun TrackListItem(
@@ -193,7 +193,7 @@ fun formatTime(ms: Long): String {
 @Preview(showBackground = true)
 @Composable
 fun TrackListItemPreview() {
-    TemplateAppTheme {
+    NetworkMusicPlayerTheme {
         TrackListItem(
             track = SampleData.sampleTracks.first(),
             isPlayingCurrent = true,

@@ -36,7 +36,7 @@ import com.example.networkmusicplayer.data.SampleData
 import com.example.networkmusicplayer.model.LibraryFilter
 import com.example.networkmusicplayer.model.Track
 import com.example.networkmusicplayer.ui.components.TrackListItem
-import com.example.networkmusicplayer.ui.theme.TemplateAppTheme
+import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 
 @Composable
 fun LibraryScreen(
@@ -163,7 +163,7 @@ fun LibraryScreen(
 @Preview(showBackground = true)
 @Composable
 fun LibraryScreenPreview() {
-    TemplateAppTheme {
+    NetworkMusicPlayerTheme {
         LibraryScreen(
             tracks = SampleData.sampleTracks,
             currentTrack = SampleData.sampleTracks.first(),

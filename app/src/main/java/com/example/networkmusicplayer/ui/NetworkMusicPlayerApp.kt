@@ -35,7 +35,7 @@ import com.example.networkmusicplayer.ui.components.QueueBottomSheet
 import com.example.networkmusicplayer.ui.screens.LibraryScreen
 import com.example.networkmusicplayer.ui.screens.NetworkScreen
 import com.example.networkmusicplayer.ui.screens.SearchScreen
-import com.example.networkmusicplayer.ui.theme.TemplateAppTheme
+import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 import com.example.networkmusicplayer.viewmodel.MusicPlayerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -210,7 +210,7 @@ fun NetworkMusicPlayerApp(
 @Preview(showBackground = true)
 @Composable
 fun NetworkMusicPlayerAppPreview() {
-    TemplateAppTheme {
+    NetworkMusicPlayerTheme {
         NetworkMusicPlayerApp()
     }
 }
