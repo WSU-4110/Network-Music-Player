@@ -88,5 +88,5 @@ Implement File Search
 - Medium priority, medium size
 Implement Playlist Shuffle, Seekbar, and Volume Slider
 - Low  priority, medium size
-- 
+
 The primary goal of Sprint 2 is to implement network file access, as this is the most complex task of the entire project. File search is a leftover from Sprint 1, and everything else is droppable and can be pushed to Sprint 3 if needed. 
