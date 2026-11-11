@@ -37,6 +37,10 @@ import com.example.networkmusicplayer.model.LibraryFilter
 import com.example.networkmusicplayer.model.Track
 import com.example.networkmusicplayer.ui.components.TrackListItem
 import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
+import androidx.compose.material3.TextButton
+import com.example.networkmusicplayer.model.PlaylistManager
+
+
 
 @Composable
 fun LibraryScreen(
@@ -130,6 +134,15 @@ fun LibraryScreen(
         }
 
         Spacer(modifier = Modifier.height(12.dp))
+
+
+        TextButton(
+            onClick = {
+                PlaylistManager.createPlaylist("My Playlist")
+            }
+        ) {
+            Text("Create Playlist")
+        }
 
         // Tracks List
         if (filteredTracks.isEmpty()) {

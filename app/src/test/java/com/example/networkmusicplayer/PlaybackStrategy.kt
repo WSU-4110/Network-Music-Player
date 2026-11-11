@@ -1,0 +1,3 @@
+interface PlaybackStrategy {
+    fun playNextSong()
+}
