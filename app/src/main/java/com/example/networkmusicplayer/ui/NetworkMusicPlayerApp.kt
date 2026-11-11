@@ -45,7 +45,8 @@ fun NetworkMusicPlayerApp(
     onPlaySong: () -> Unit = {},
     onPauseSong: () -> Unit = {},
     onNextSong: () -> Unit = {},
-    onPrevSong: () -> Unit = {}
+    onPrevSong: () -> Unit = {},
+    startSearch: (String) -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -157,7 +158,7 @@ fun NetworkMusicPlayerApp(
                     tracks = uiState.allTracks,
                     currentTrack = uiState.currentTrack,
                     searchQuery = uiState.searchQuery,
-                    onSearchQueryChange = { viewModel.setSearchQuery(it) },
+                    onSearchQueryChange = { viewModel.setSearchQuery(it); startSearch(it) },
                     onTrackSelect = { viewModel.playTrack(it) },
                     onFavoriteToggle = { viewModel.toggleFavorite(it) }
                 )

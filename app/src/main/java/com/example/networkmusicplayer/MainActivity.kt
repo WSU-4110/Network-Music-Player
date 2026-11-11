@@ -1,4 +1,5 @@
 package com.example.networkmusicplayer
+import com.example.networkmusicplayer.filemanagement.MusicParser
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,6 +19,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.datasource.RawResourceDataSource
 import android.net.Uri
+import com.example.networkmusicplayer.filemanagement.MusicInfo
 
 class MainActivity : ComponentActivity() {
 
@@ -32,7 +34,8 @@ class MainActivity : ComponentActivity() {
                     onPlaySong = { playSong() },
                     onPauseSong = { pauseSong() },
                     onNextSong = { nextSong() },
-                    onPrevSong = { prevSong() })
+                    onPrevSong = { prevSong() },
+                    startSearch = { startSearch(it) })
             }
         }
         //Initialize ExoPlayer
@@ -61,6 +64,14 @@ class MainActivity : ComponentActivity() {
 
     fun prevSong() {
         player?.seekToPreviousMediaItem()
+    }
+
+    fun startSearch(query: String) {
+        val parser = MusicParser()
+        val uri = Uri.parse(query)
+        //I don't know why the parse method is unrecognized
+        val song = parser.parse(this, uri)
+
     }
 
     override fun onDestroy() {

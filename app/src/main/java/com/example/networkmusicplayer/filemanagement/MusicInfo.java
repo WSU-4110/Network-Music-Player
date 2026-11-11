@@ -26,4 +26,14 @@ public class MusicInfo {
         this.mimeType = mimeType;
         this.albumArt = albumArt;
     }
+
+    public MusicInfo()
+    {
+        this.title = "Unknown title";
+        this.artist = "Unknown artist";
+        this.album = "Unknown album";
+        this.durationMs = -1L;
+        this.mimeType = "Unknown mime type";
+        this.albumArt = null;
+    }
 }
