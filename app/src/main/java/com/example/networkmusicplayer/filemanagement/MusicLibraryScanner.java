@@ -13,13 +13,22 @@ import java.util.Set;
 
 public final class MusicLibraryScanner {
 
-    private static final Set<String> AUDIO_EXTENSIONS = Set.of("mp3", "m4a", "wav", "flac");
+    private static MusicLibraryScanner instance;
+    private final Set<String> AUDIO_EXTENSIONS;
 
-    private MusicLibraryScanner() {}
+    private MusicLibraryScanner() {
+        AUDIO_EXTENSIONS = Set.of("mp3", "m4a", "wav", "flac");
+    }
+
+    public static MusicLibraryScanner getInstance() {
+        if (instance == null)
+            instance = new MusicLibraryScanner();
+        return instance;
+    }
 
     //Scans a normal filesystem directory.
     //Use only for directories the app can access.
-    public static List<MusicInfo> scanDirectory(Context context, File directory) {
+    public List<MusicInfo> scanDirectory(Context context, File directory) {
         List<MusicInfo> songs = new ArrayList<>();
 
         if (directory == null || !directory.isDirectory() || !directory.canRead()) {
@@ -32,7 +41,7 @@ public final class MusicLibraryScanner {
 
     //Scans a directory selected using ACTION_OPEN_DOCUMENT_TREE.
     //The app must have permission to access the selected tree.
-    public static List<MusicInfo> scanTree(Context context, Uri treeUri) {
+    public List<MusicInfo> scanTree(Context context, Uri treeUri) {
         List<MusicInfo> songs = new ArrayList<>();
 
         if (treeUri == null) {
@@ -48,7 +57,7 @@ public final class MusicLibraryScanner {
         return songs;
     }
 
-    private static void scanFileDirectory(Context context, File directory, List<MusicInfo> songs) {
+    private void scanFileDirectory(Context context, File directory, List<MusicInfo> songs) {
         File[] entries = directory.listFiles();
 
         if (entries == null) {
@@ -72,7 +81,7 @@ public final class MusicLibraryScanner {
         }
     }
 
-    private static void scanDocumentDirectory(Context context, DocumentFile directory, List<MusicInfo> songs) {
+    private void scanDocumentDirectory(Context context, DocumentFile directory, List<MusicInfo> songs) {
         DocumentFile[] entries = directory.listFiles();
 
         for (DocumentFile entry : entries) {
@@ -93,7 +102,7 @@ public final class MusicLibraryScanner {
         }
     }
 
-    private static boolean isAudioFile(String name) {
+    private boolean isAudioFile(String name) {
         if (name == null) {
             return false;
         }
