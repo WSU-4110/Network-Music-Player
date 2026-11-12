@@ -32,7 +32,7 @@ public final class MusicLibraryScanner {
 
     //Scans a directory selected using ACTION_OPEN_DOCUMENT_TREE.
     //The app must have permission to access the selected tree.
-    public static List<MusicInfo> scanTree(Context context, Uri treeUri) {
+    public List<MusicInfo> scanTree(Context context, Uri treeUri) {
         List<MusicInfo> songs = new ArrayList<>();
 
         if (treeUri == null) {

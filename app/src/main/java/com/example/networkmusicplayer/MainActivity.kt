@@ -18,6 +18,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.datasource.RawResourceDataSource
 import android.net.Uri
+import com.example.networkmusicplayer.filemanagement.MusicParser
 
 class MainActivity : ComponentActivity() {
 
@@ -32,7 +33,8 @@ class MainActivity : ComponentActivity() {
                     onPlaySong = { playSong() },
                     onPauseSong = { pauseSong() },
                     onNextSong = { nextSong() },
-                    onPrevSong = { prevSong() })
+                    onPrevSong = { prevSong() },
+                    onSearchClick = { startSearch(it) })
             }
         }
         //Initialize ExoPlayer
@@ -62,6 +64,15 @@ class MainActivity : ComponentActivity() {
     fun prevSong() {
         player?.seekToPreviousMediaItem()
     }
+
+    //Function called when search icon button is clicked
+    fun startSearch(query: String) {
+
+    }
+
+    // Template for passing a URI to the music parser
+    // val uri = Uri.parse(query)
+    // val song = MusicParser.parse(this, uri)
 
     override fun onDestroy() {
         super.onDestroy()

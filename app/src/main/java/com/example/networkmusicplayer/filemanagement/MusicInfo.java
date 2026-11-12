@@ -1,6 +1,10 @@
 package com.example.networkmusicplayer.filemanagement;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 
 public class MusicInfo {
 

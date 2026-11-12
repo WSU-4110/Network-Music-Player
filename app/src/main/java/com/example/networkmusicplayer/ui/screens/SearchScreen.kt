@@ -38,6 +38,7 @@ fun SearchScreen(
     currentTrack: Track?,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
+    onSearchClick: (String) -> Unit = {},
     onTrackSelect: (Track) -> Unit,
     onFavoriteToggle: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -67,11 +68,13 @@ fun SearchScreen(
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             placeholder = { Text("Search title, artist, album, network stream...") },
             leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Search",
-                    tint = MaterialTheme.colorScheme.primary
-                )
+                IconButton(onClick = { onSearchClick(searchQuery) }) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Search",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
             },
             trailingIcon = {
                 if (searchQuery.isNotEmpty()) {
@@ -149,6 +152,7 @@ fun SearchScreenPreview() {
             currentTrack = SampleData.sampleTracks.first(),
             searchQuery = "chill",
             onSearchQueryChange = {},
+            onSearchClick = {},
             onTrackSelect = {},
             onFavoriteToggle = {}
         )
