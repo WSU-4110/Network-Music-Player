@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import com.example.networkmusicplayer.model.NetworkServer
 import com.example.networkmusicplayer.model.Track
 
+//Temporary sample data for songs and servers
 object SampleData {
     val sampleServers = listOf(
         NetworkServer(

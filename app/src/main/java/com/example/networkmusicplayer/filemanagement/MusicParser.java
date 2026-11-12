@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 
+//Class used for parsing music data from selected song
 public class MusicParser {
 
     public static MusicInfo parse(Context context, Uri uri) throws Exception {

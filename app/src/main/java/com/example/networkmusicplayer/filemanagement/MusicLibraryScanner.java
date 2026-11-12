@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+//Scanner that scans local directories for music files
 public final class MusicLibraryScanner {
 
     private static final Set<String> AUDIO_EXTENSIONS = Set.of("mp3", "m4a", "wav", "flac");

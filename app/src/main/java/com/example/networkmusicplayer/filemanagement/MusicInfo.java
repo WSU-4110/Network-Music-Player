@@ -1,7 +1,7 @@
 package com.example.networkmusicplayer.filemanagement;
 
 import android.graphics.Bitmap;
-
+//Class that stores data for songs
 public class MusicInfo {
 
     public final String title;

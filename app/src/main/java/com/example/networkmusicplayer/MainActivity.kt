@@ -28,6 +28,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NetworkMusicPlayerTheme {
+                //Pass button functionality calls to NetworkMusicPlayerApp
                 NetworkMusicPlayerApp(
                     onPlaySong = { playSong() },
                     onPauseSong = { pauseSong() },
@@ -47,6 +48,7 @@ class MainActivity : ComponentActivity() {
         player?.setMediaItems(uris.map {MediaItem.fromUri(it)})
         player?.prepare()
     }
+    //functions for player buttons
     private fun playSong() {
         player?.play()
     }
@@ -63,6 +65,7 @@ class MainActivity : ComponentActivity() {
         player?.seekToPreviousMediaItem()
     }
 
+    //Cleanup player after the activity is destroyed
     override fun onDestroy() {
         super.onDestroy()
         player?.release()

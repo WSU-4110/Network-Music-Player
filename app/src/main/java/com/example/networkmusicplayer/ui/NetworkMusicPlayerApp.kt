@@ -40,6 +40,8 @@ import com.example.networkmusicplayer.viewmodel.MusicPlayerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
+//Main home page composable. Passes button functionality lambdas as parameters.
 fun NetworkMusicPlayerApp(
     viewModel: MusicPlayerViewModel = viewModel(),
     onPlaySong: () -> Unit = {},
