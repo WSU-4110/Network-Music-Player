@@ -2,13 +2,14 @@ package com.example.networkmusicplayer.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.util.copy
 import com.example.networkmusicplayer.data.SampleData
 import com.example.networkmusicplayer.model.LibraryFilter
 import com.example.networkmusicplayer.model.NavTab
-import com.example.networkmusicplayer.model.NetworkServer
+import com.example.networkmusicplayer.filemanagement.NetworkServer
 import com.example.networkmusicplayer.model.PlayerUiState
 import com.example.networkmusicplayer.model.RepeatMode
-import com.example.networkmusicplayer.model.Track
+import com.example.networkmusicplayer.filemanagement.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -192,18 +193,30 @@ class MusicPlayerViewModel : ViewModel() {
         }
     }
 
-    fun toggleFavorite(trackId: String) {
+    fun toggleFavorite(trackId: Int) {
         _uiState.update { state ->
             val updatedAll = state.allTracks.map {
-                if (it.id == trackId) it.copy(isFavorite = !it.isFavorite) else it
+                if (it.id == trackId) {
+                    it.isFavorite = !it.isFavorite
+                    it.copy()
+                }
+                else it
             }
+
             val updatedQueue = state.queue.map {
-                if (it.id == trackId) it.copy(isFavorite = !it.isFavorite) else it
+                if (it.id == trackId) {
+                    it.isFavorite = !it.isFavorite
+                    it.copy()
+                }
+                else it
             }
+
             val updatedCurrent = if (state.currentTrack?.id == trackId) {
-                state.currentTrack.copy(isFavorite = !state.currentTrack.isFavorite)
-            } else {
-                state.currentTrack
+                state.currentTrack.isFavorite = !state.currentTrack.isFavorite
+                state.currentTrack.copy()
+            }
+            else {
+                state.currentTrack?.copy()
             }
 
             state.copy(

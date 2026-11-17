@@ -1,0 +1,57 @@
+package com.example.networkmusicplayer.filemanagement
+
+import android.graphics.Bitmap
+import androidx.compose.ui.graphics.Color
+
+class Track() {
+    var id: Int = -1;
+    var title: String = "Unknown Title";
+    var artist: String = "Unknown artist";
+    var album: String = "Unknown album";
+    var durationMs: Long = -1;
+    var coverColor: Color = Color.White;
+    var isNetworkTrack: Boolean = false;
+    var sourceUrl: String? = null;
+    var isFavorite: Boolean = false;
+    var bitrate: String = "320 kbps MP3";
+    var albumArt: Bitmap? = null;
+
+    constructor(id: Int, title: String, artist: String, album: String, durationMs: Long, coverColor: Color, isNetworkTrack: Boolean, sourceUrl: String?, isFavorite: Boolean, bitrate: String) : this() {
+        this.id = id;
+        this.title = title;
+        this.artist = artist;
+        this.album = album;
+        this.durationMs = durationMs;
+        this.coverColor = coverColor;
+        this.isNetworkTrack = isNetworkTrack;
+        this.sourceUrl = sourceUrl;
+        this.isFavorite = isFavorite;
+        this.bitrate = bitrate;
+    }
+
+    fun copy() : Track {
+        val track = Track();
+        track.id = this.id;
+        track.title = this.title;
+        track.artist = this.artist;
+        track.album = this.album;
+        track.durationMs = this.durationMs;
+        track.coverColor = this.coverColor;
+        track.isNetworkTrack = this.isNetworkTrack;
+        track.sourceUrl = this.sourceUrl;
+        track.isFavorite = this.isFavorite;
+        track.bitrate = this.bitrate;
+        track.albumArt = this.albumArt;
+
+        return track;
+    }
+}
+
+data class NetworkServer(
+    val id: String,
+    val name: String,
+    val protocol: String, // e.g., "HTTP/HTTPS", "SMB/NAS", "DLNA/UPnP"
+    val address: String,
+    val isConnected: Boolean = true,
+    val trackCount: Int = 0
+)

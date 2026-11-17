@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.networkmusicplayer.data.SampleData
 import com.example.networkmusicplayer.model.LibraryFilter
-import com.example.networkmusicplayer.model.Track
+import com.example.networkmusicplayer.filemanagement.Track
 import com.example.networkmusicplayer.ui.components.TrackListItem
 import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 
@@ -45,7 +45,7 @@ fun LibraryScreen(
     activeFilter: LibraryFilter,
     onFilterSelect: (LibraryFilter) -> Unit,
     onTrackSelect: (Track) -> Unit,
-    onFavoriteToggle: (String) -> Unit,
+    onFavoriteToggle: (Int) -> Unit,
     onPlayAll: () -> Unit,
     isPlaying: Boolean,
     onPlayClick: () -> Unit,

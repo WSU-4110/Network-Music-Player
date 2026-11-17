@@ -1,8 +1,8 @@
 package com.example.networkmusicplayer.data
 
 import androidx.compose.ui.graphics.Color
-import com.example.networkmusicplayer.model.NetworkServer
-import com.example.networkmusicplayer.model.Track
+import com.example.networkmusicplayer.filemanagement.NetworkServer
+import com.example.networkmusicplayer.filemanagement.Track
 
 //Temporary sample data for songs and servers
 object SampleData {
@@ -35,7 +35,7 @@ object SampleData {
 
     val sampleTracks = listOf(
         Track(
-            id = "t1",
+            id = 0,
             title = "Dirty Harry",
             artist = "Gorillaz",
             album = "Demon Days",
@@ -47,7 +47,7 @@ object SampleData {
             bitrate = "FLAC 24-bit / 96kHz"
         ),
         Track(
-            id = "t2",
+            id = 1,
             title = "Feel Good Inc",
             artist = "Gorillaz",
             album = "Demon Days",

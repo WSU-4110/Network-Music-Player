@@ -1,5 +1,8 @@
 package com.example.networkmusicplayer.model
 
+import com.example.networkmusicplayer.filemanagement.NetworkServer
+import com.example.networkmusicplayer.filemanagement.Track
+
 enum class RepeatMode {
     NONE,
     ALL,

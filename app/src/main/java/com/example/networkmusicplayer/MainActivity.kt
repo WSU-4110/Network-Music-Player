@@ -41,8 +41,6 @@ class MainActivity : ComponentActivity() {
 
         // Load a set song from res/raw (temporary)
         val uris: List<Uri> = listOf(
-            Uri.parse("android.resource://$packageName/${R.raw.dirty_harry}"),
-            Uri.parse("android.resource://$packageName/${R.raw.feel_good_inc}")
         )
 
         player?.setMediaItems(uris.map {MediaItem.fromUri(it)})

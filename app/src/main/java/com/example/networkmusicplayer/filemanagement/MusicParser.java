@@ -9,7 +9,7 @@ import android.net.Uri;
 //Class used for parsing music data from selected song
 public class MusicParser {
 
-    public static MusicInfo parse(Context context, Uri uri) throws Exception {
+    public static Track parse(Context context, Uri uri) throws Exception {
 
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 
@@ -44,14 +44,16 @@ public class MusicParser {
                 artwork = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
             }
 
-            return new MusicInfo(
-                    title != null ? title : "Unknown title",
-                    artist != null ? artist : "Unknown artist",
-                    album != null ? album : "Unknown album",
-                    durationMs,
-                    mimeType,
-                    artwork
-            );
+            Track track = new Track();
+            if (title != null)
+                track.setTitle(title);
+            if (artist != null)
+                track.setArtist(artist);
+            if (album != null)
+                track.setAlbum(album);
+            track.setDurationMs(durationMs);
+            track.setAlbumArt(artwork);
+            return track;
 
         }
         finally {
