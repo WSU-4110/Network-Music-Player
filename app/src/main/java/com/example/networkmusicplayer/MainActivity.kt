@@ -36,16 +36,10 @@ class MainActivity : ComponentActivity() {
                     onPrevSong = { prevSong() })
             }
         }
-        //Initialize ExoPlayer
+        // Initialize ExoPlayer instance for audio playback
         player = ExoPlayer.Builder(this).build()
 
-        // Load a set song from res/raw (temporary)
-        val uris: List<Uri> = listOf(
-            Uri.parse("android.resource://$packageName/${R.raw.dirty_harry}"),
-            Uri.parse("android.resource://$packageName/${R.raw.feel_good_inc}")
-        )
-
-        player?.setMediaItems(uris.map {MediaItem.fromUri(it)})
+        // Prepare player controls
         player?.prepare()
     }
     //functions for player buttons

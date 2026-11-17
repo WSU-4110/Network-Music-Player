@@ -2,10 +2,12 @@ package com.example.networkmusicplayer.data
 
 import androidx.compose.ui.graphics.Color
 import com.example.networkmusicplayer.model.NetworkServer
+import com.example.networkmusicplayer.model.Playlist
 import com.example.networkmusicplayer.model.Track
 
 //Temporary sample data for songs and servers
 object SampleData {
+    val samplePlaylists = emptyList<Playlist>()
     val sampleServers = listOf(
         NetworkServer(
             id = "server-1",
