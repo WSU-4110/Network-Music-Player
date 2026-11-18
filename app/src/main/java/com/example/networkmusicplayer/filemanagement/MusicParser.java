@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 
+import kotlin.text.UStringsKt;
+
 //Class used for parsing music data from selected song
 public class MusicParser {
 
@@ -25,6 +27,8 @@ public class MusicParser {
             String duration = getMetadata(retriever, MediaMetadataRetriever.METADATA_KEY_DURATION);
 
             String mimeType = getMetadata(retriever, MediaMetadataRetriever.METADATA_KEY_MIMETYPE);
+
+            String bitrateStr = getMetadata(retriever, MediaMetadataRetriever.METADATA_KEY_BITRATE);
 
             long durationMs = -1L;
 
@@ -51,6 +55,10 @@ public class MusicParser {
                 track.setArtist(artist);
             if (album != null)
                 track.setAlbum(album);
+            if (bitrateStr != null) {
+                long bitrate = Long.parseLong(bitrateStr);
+                track.setBitrate((bitrate / 1000) + " kbps");
+            }
             track.setDurationMs(durationMs);
             track.setAlbumArt(artwork);
             return track;

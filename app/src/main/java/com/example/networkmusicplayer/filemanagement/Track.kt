@@ -2,22 +2,25 @@ package com.example.networkmusicplayer.filemanagement
 
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.Color
+import kotlin.random.Random
+import kotlin.random.nextLong
 
 class Track() {
-    var id: Int = -1;
-    var title: String = "Unknown Title";
-    var artist: String = "Unknown artist";
-    var album: String = "Unknown album";
-    var durationMs: Long = -1;
-    var coverColor: Color = Color.Red;
-    var isNetworkTrack: Boolean = false;
-    var sourceUrl: String? = null;
-    var isFavorite: Boolean = false;
-    var bitrate: String = "320 kbps MP3";
-    var albumArt: Bitmap? = null;
+    var id: Int = -1
+    var title: String = ""
+    var artist: String = "Unknown artist"
+    var album: String = "Unknown album"
+    var durationMs: Long = -1
+    var coverColor: Color = Color.Red
+    var isNetworkTrack: Boolean = false
+    var sourceUrl: String? = null
+    var isFavorite: Boolean = false
+    var bitrate: String = "        "
+    var albumArt: Bitmap? = null
 
     constructor(a: Int = -1) : this() {
         id = Track.TrackID++
+        coverColor = Color(Random.nextLong())
     }
 
     fun copy() : Track {

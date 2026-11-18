@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
 import java.util.UUID
 import kotlin.collections.minus
 
@@ -30,26 +32,6 @@ class MusicPlayerViewModel : ViewModel() {
     val uiState: StateFlow<PlayerUiState> = _uiState.asStateFlow()
 
     private var playbackJob: Job? = null
-
-    init {
-        /*
-        val initialServers = mutableListOf<NetworkServer>()
-
-        val musicDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
-        initialServers += NetworkServer.BuildFromDirectory("Local Storage", "Local", musicDirectory)
-        val initialTracks = initialServers[0].myTracks
-        val firstTrack = initialTracks.firstOrNull()
-
-        _uiState.update { state ->
-            state.copy(
-                allTracks = initialTracks,
-                queue = initialTracks,
-                currentTrack = firstTrack,
-                networkServers = initialServers
-            )
-        }
-         */
-    }
 
 
     private fun startPlaybackTimer() {
@@ -278,14 +260,11 @@ class MusicPlayerViewModel : ViewModel() {
     }
 
     fun addNetworkServer(name: String, address: String, protocol: String) {
-        val newServer = NetworkServer()
-        newServer.name = name.ifBlank { "Custom Network Stream" }
-        newServer.protocol = protocol.ifBlank { "HTTP/HTTPS Stream" }
-        newServer.address = address.ifBlank { "http://localhost:8080" }
+        val file = File(address)
+        if (!file.exists() || !file.isDirectory)
+            return
 
-        _uiState.update { state ->
-            state.copy(networkServers = state.networkServers + newServer)
-        }
+        scanAudioFiles(name, protocol, file)
     }
 
     fun toggleServerConnection(serverId: Int) {

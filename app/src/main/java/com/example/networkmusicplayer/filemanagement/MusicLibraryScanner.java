@@ -96,6 +96,12 @@ public final class MusicLibraryScanner {
                 try {
                     Uri uri = Uri.fromFile(entry);
                     Track info = MusicParser.parse(m_MainContext, uri);
+                    if (info.getTitle().isEmpty())
+                        info.setTitle(entry.getName());
+                    String bitrate = info.getBitrate();
+                    int dot = entry.getName().lastIndexOf('.');
+                    String extension = entry.getName().substring(dot + 1).toUpperCase(Locale.ROOT);
+                    info.setBitrate(bitrate + " " + extension);
                     info.setSourceUrl(entry.getPath());
                     songs.add(info);
                     Log.d("NMP", "Song Added");
