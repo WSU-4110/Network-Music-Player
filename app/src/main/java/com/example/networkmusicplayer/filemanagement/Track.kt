@@ -47,11 +47,3 @@ class Track() {
     }
 }
 
-data class NetworkServer(
-    val id: String,
-    val name: String,
-    val protocol: String, // e.g., "HTTP/HTTPS", "SMB/NAS", "DLNA/UPnP"
-    val address: String,
-    val isConnected: Boolean = true,
-    val trackCount: Int = 0
-)

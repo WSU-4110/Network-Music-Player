@@ -1,15 +1,14 @@
 package com.example.networkmusicplayer.viewmodel
 
+import android.os.Environment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.util.copy
-import com.example.networkmusicplayer.data.SampleData
+import com.example.networkmusicplayer.filemanagement.NetworkServer
+import com.example.networkmusicplayer.filemanagement.Track
 import com.example.networkmusicplayer.model.LibraryFilter
 import com.example.networkmusicplayer.model.NavTab
-import com.example.networkmusicplayer.filemanagement.NetworkServer
 import com.example.networkmusicplayer.model.PlayerUiState
 import com.example.networkmusicplayer.model.RepeatMode
-import com.example.networkmusicplayer.filemanagement.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +19,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.util.UUID
 
+
 class MusicPlayerViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow(PlayerUiState())
@@ -28,8 +28,11 @@ class MusicPlayerViewModel : ViewModel() {
     private var playbackJob: Job? = null
 
     init {
-        val initialTracks = SampleData.sampleTracks
-        val initialServers = SampleData.sampleServers
+        val initialServers = mutableListOf<NetworkServer>()
+
+        val musicDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
+        initialServers += NetworkServer.BuildFromDirectory("Local Storage", "Local", musicDirectory)
+        val initialTracks = initialServers[0].myTracks
         val firstTrack = initialTracks.firstOrNull()
 
         _uiState.update { state ->
@@ -268,25 +271,25 @@ class MusicPlayerViewModel : ViewModel() {
     }
 
     fun addNetworkServer(name: String, address: String, protocol: String) {
-        val newServer = NetworkServer(
-            id = UUID.randomUUID().toString(),
-            name = name.ifBlank { "Custom Network Stream" },
-            protocol = protocol.ifBlank { "HTTP/HTTPS Stream" },
-            address = address.ifBlank { "http://localhost:8080" },
-            isConnected = true,
-            trackCount = (10..500).random()
-        )
+        val newServer = NetworkServer()
+        newServer.id = 2
+        newServer.name = name.ifBlank { "Custom Network Stream" }
+        newServer.protocol = protocol.ifBlank { "HTTP/HTTPS Stream" }
+        newServer.address = address.ifBlank { "http://localhost:8080" }
+
         _uiState.update { state ->
             state.copy(networkServers = state.networkServers + newServer)
         }
     }
 
-    fun toggleServerConnection(serverId: String) {
+    fun toggleServerConnection(serverId: Int) {
         _uiState.update { state ->
             val updated = state.networkServers.map { server ->
                 if (server.id == serverId) {
-                    server.copy(isConnected = !server.isConnected)
-                } else server
+                    server.isConnected = !server.isConnected
+                    server.copy()
+                }
+                else server
             }
             state.copy(networkServers = updated)
         }

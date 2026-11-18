@@ -46,7 +46,7 @@ import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 @Composable
 fun NetworkScreen(
     servers: List<NetworkServer>,
-    onToggleServer: (String) -> Unit,
+    onToggleServer: (Int) -> Unit,
     onAddServer: (name: String, address: String, protocol: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
