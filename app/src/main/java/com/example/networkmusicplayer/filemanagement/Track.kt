@@ -9,24 +9,15 @@ class Track() {
     var artist: String = "Unknown artist";
     var album: String = "Unknown album";
     var durationMs: Long = -1;
-    var coverColor: Color = Color.White;
+    var coverColor: Color = Color.Red;
     var isNetworkTrack: Boolean = false;
     var sourceUrl: String? = null;
     var isFavorite: Boolean = false;
     var bitrate: String = "320 kbps MP3";
     var albumArt: Bitmap? = null;
 
-    constructor(id: Int, title: String, artist: String, album: String, durationMs: Long, coverColor: Color, isNetworkTrack: Boolean, sourceUrl: String?, isFavorite: Boolean, bitrate: String) : this() {
-        this.id = id;
-        this.title = title;
-        this.artist = artist;
-        this.album = album;
-        this.durationMs = durationMs;
-        this.coverColor = coverColor;
-        this.isNetworkTrack = isNetworkTrack;
-        this.sourceUrl = sourceUrl;
-        this.isFavorite = isFavorite;
-        this.bitrate = bitrate;
+    constructor(a: Int = -1) : this() {
+        id = Track.TrackID++
     }
 
     fun copy() : Track {
@@ -44,6 +35,10 @@ class Track() {
         track.albumArt = this.albumArt;
 
         return track;
+    }
+
+    companion object {
+        var TrackID: Int = 0
     }
 }
 

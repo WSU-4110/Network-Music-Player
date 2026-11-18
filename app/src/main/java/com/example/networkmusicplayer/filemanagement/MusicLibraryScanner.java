@@ -1,12 +1,18 @@
 package com.example.networkmusicplayer.filemanagement;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
+import android.util.Log;
 
+import androidx.core.content.ContextCompat;
 import androidx.documentfile.provider.DocumentFile;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -14,7 +20,7 @@ import java.util.Set;
 //Scanner that scans local directories for music files
 public final class MusicLibraryScanner {
 
-    private static final Set<String> AUDIO_EXTENSIONS = Set.of("mp3", "m4a", "wav", "flac");
+    private static final Set<String> AUDIO_EXTENSIONS = Set.of("mp3", "m4a", "wav", "flac", "ogg");
     private static MusicLibraryScanner instance;
     private Context m_MainContext;
 
@@ -39,9 +45,15 @@ public final class MusicLibraryScanner {
     //Scans a normal filesystem directory.
     //Use only for directories the app can access.
     public List<Track> scanDirectory(File directory) {
+        if (!checkMusicPermission()) {
+            Log.d("NMP", "No Permission");
+            return Collections.emptyList();
+        }
+        Log.d("NMP", "Scanning Directory...");
         List<Track> songs = new ArrayList<>();
 
         if (directory == null || !directory.isDirectory() || !directory.canRead()) {
+            Log.d("NMP", "Directory Unreadable");
             return songs;
         }
 
@@ -71,10 +83,12 @@ public final class MusicLibraryScanner {
         File[] entries = directory.listFiles();
 
         if (entries == null) {
+            Log.d("NMP", "No Entries");
             return;
         }
 
         for (File entry : entries) {
+            Log.d("NMP", entry.getName());
             if (entry.isDirectory()) {
                 scanFileDirectory(entry, songs);
             }
@@ -82,9 +96,12 @@ public final class MusicLibraryScanner {
                 try {
                     Uri uri = Uri.fromFile(entry);
                     Track info = MusicParser.parse(m_MainContext, uri);
+                    info.setSourceUrl(entry.getPath());
                     songs.add(info);
+                    Log.d("NMP", "Song Added");
                 }
                 catch (Exception e) {
+                    Log.d("NMP", "Caught Exception");
                     // Skip unreadable or unsupported files.
                 }
             }
@@ -126,5 +143,12 @@ public final class MusicLibraryScanner {
         String extension = name.substring(dot + 1).toLowerCase(Locale.ROOT);
 
         return AUDIO_EXTENSIONS.contains(extension);
+    }
+
+    private boolean checkMusicPermission() {
+        if (Build.VERSION.SDK_INT >= 33) {
+            return ContextCompat.checkSelfPermission(m_MainContext, Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED;
+        }
+        return false;
     }
 }

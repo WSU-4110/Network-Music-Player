@@ -44,7 +44,7 @@ public class MusicParser {
                 artwork = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
             }
 
-            Track track = new Track();
+            Track track = new Track(-1);
             if (title != null)
                 track.setTitle(title);
             if (artist != null)

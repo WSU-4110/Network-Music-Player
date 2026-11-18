@@ -1,7 +1,9 @@
 package com.example.networkmusicplayer.viewmodel
 
 import android.os.Environment
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.example.networkmusicplayer.filemanagement.NetworkServer
 import com.example.networkmusicplayer.filemanagement.Track
@@ -17,7 +19,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.UUID
+import kotlin.collections.minus
 
 
 class MusicPlayerViewModel : ViewModel() {
@@ -28,6 +32,7 @@ class MusicPlayerViewModel : ViewModel() {
     private var playbackJob: Job? = null
 
     init {
+        /*
         val initialServers = mutableListOf<NetworkServer>()
 
         val musicDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
@@ -43,7 +48,9 @@ class MusicPlayerViewModel : ViewModel() {
                 networkServers = initialServers
             )
         }
+         */
     }
+
 
     private fun startPlaybackTimer() {
         playbackJob?.cancel()
@@ -272,7 +279,6 @@ class MusicPlayerViewModel : ViewModel() {
 
     fun addNetworkServer(name: String, address: String, protocol: String) {
         val newServer = NetworkServer()
-        newServer.id = 2
         newServer.name = name.ifBlank { "Custom Network Stream" }
         newServer.protocol = protocol.ifBlank { "HTTP/HTTPS Stream" }
         newServer.address = address.ifBlank { "http://localhost:8080" }
@@ -283,15 +289,47 @@ class MusicPlayerViewModel : ViewModel() {
     }
 
     fun toggleServerConnection(serverId: Int) {
+        var networkServer = NetworkServer()
         _uiState.update { state ->
             val updated = state.networkServers.map { server ->
                 if (server.id == serverId) {
                     server.isConnected = !server.isConnected
+                    networkServer = server
                     server.copy()
                 }
                 else server
             }
-            state.copy(networkServers = updated)
+            if (networkServer.isConnected)
+                state.copy(networkServers = updated,
+                    allTracks = (state.allTracks + networkServer.myTracks).sortedBy { it.id })
+            else
+                state.copy(networkServers = updated,
+                    allTracks = (state.allTracks - networkServer.myTracks.toSet()).sortedBy { it.id }
+                )
+        }
+    }
+
+    fun scanAudioFiles(name: String, protocol: String, directory: File) {
+        if (_uiState.value.isLoading)
+            return
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isLoading = true)
+            }
+
+            try {
+                val server = NetworkServer.BuildFromDirectory(name, protocol, directory)
+                _uiState.update { state ->
+                    state.copy(networkServers = state.networkServers + server,
+                        allTracks = state.allTracks + server.myTracks,
+                        isLoading = false)
+                }
+            }
+            catch (e: Exception) {
+                _uiState.update {
+                    it.copy(isLoading = false)
+                }
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ class NetworkServer {
     var name: String = "None"
     var protocol: String = "Local" // e.g., "HTTP/HTTPS", "SMB/NAS", "DLNA/UPnP"
     var address: String = ""
-    var isConnected: Boolean = false
+    var isConnected: Boolean = true
     var myTracks: List<Track> = emptyList()
     var trackCount: Int = 0
 
@@ -25,8 +25,10 @@ class NetworkServer {
     }
 
     companion object {
+        var NetworkServerID: Int = 0
         fun BuildFromDirectory(name: String, protocol: String, directory: File): NetworkServer {
             val server = NetworkServer()
+            server.id = NetworkServerID++
             server.name = name
             server.protocol = protocol
             server.address = directory.path

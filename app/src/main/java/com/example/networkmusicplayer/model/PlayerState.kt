@@ -41,6 +41,7 @@ data class PlayerUiState(
     val bassBoost: Float = 0.5f,
     val trebleBoost: Float = 0.5f,
     val networkServers: List<NetworkServer> = emptyList(),
-    val allTracks: List<Track> = emptyList()
+    val allTracks: List<Track> = emptyList(),
+    val isLoading: Boolean = false
 )
 
