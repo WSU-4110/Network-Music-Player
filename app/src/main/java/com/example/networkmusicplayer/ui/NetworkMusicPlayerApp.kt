@@ -35,6 +35,7 @@ import com.example.networkmusicplayer.ui.components.QueueBottomSheet
 import com.example.networkmusicplayer.ui.screens.LibraryScreen
 import com.example.networkmusicplayer.ui.screens.NetworkScreen
 import com.example.networkmusicplayer.ui.screens.SearchScreen
+import com.example.networkmusicplayer.ui.smb.SmbDownloadScreen
 import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 import com.example.networkmusicplayer.viewmodel.MusicPlayerViewModel
 
@@ -144,15 +145,17 @@ fun NetworkMusicPlayerApp(
                         }
                     }
                 )
-
-                NavTab.NETWORK -> NetworkScreen(
+                NavTab.NETWORK -> SmbDownloadScreen(
+                )
+                    //above is new network screen below is old one
+                /*NavTab.NETWORK -> NetworkScreen(
                     servers = uiState.networkServers,
                     onToggleServer = { viewModel.toggleServerConnection(it) },
                     onAddServer = { name, address, protocol ->
                         viewModel.addNetworkServer(name, address, protocol)
                     }
                 )
-
+                */
                 NavTab.SEARCH -> SearchScreen(
                     tracks = uiState.allTracks,
                     currentTrack = uiState.currentTrack,
