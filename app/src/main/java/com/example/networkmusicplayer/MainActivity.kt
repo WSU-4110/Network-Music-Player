@@ -18,6 +18,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.datasource.RawResourceDataSource
 import android.net.Uri
+import com.example.networkmusicplayer.filemanagement.MusicLibraryScanner
 
 class MainActivity : ComponentActivity() {
 
@@ -25,6 +26,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MusicLibraryScanner.Init(this.applicationContext)
         enableEdgeToEdge()
         setContent {
             NetworkMusicPlayerTheme {

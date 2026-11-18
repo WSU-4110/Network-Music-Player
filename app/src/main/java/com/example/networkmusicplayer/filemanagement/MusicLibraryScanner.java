@@ -15,25 +15,43 @@ import java.util.Set;
 public final class MusicLibraryScanner {
 
     private static final Set<String> AUDIO_EXTENSIONS = Set.of("mp3", "m4a", "wav", "flac");
+    private static MusicLibraryScanner instance;
+    private Context m_MainContext;
+
+    public static MusicLibraryScanner getInstance() {
+        if (instance == null)
+            instance = new MusicLibraryScanner();
+        return instance;
+    }
+
+    public static void Init(Context context) {
+        if (instance != null)
+            return;
+        instance = new MusicLibraryScanner(context);
+    }
 
     private MusicLibraryScanner() {}
 
+    private MusicLibraryScanner(Context context) {
+        this.m_MainContext = context;
+    }
+
     //Scans a normal filesystem directory.
     //Use only for directories the app can access.
-    public static List<Track> scanDirectory(Context context, File directory) {
+    public List<Track> scanDirectory(File directory) {
         List<Track> songs = new ArrayList<>();
 
         if (directory == null || !directory.isDirectory() || !directory.canRead()) {
             return songs;
         }
 
-        scanFileDirectory(context, directory, songs);
+        scanFileDirectory(directory, songs);
         return songs;
     }
 
     //Scans a directory selected using ACTION_OPEN_DOCUMENT_TREE.
     //The app must have permission to access the selected tree.
-    public static List<Track> scanTree(Context context, Uri treeUri) {
+    public List<Track> scanTree(Context context, Uri treeUri) {
         List<Track> songs = new ArrayList<>();
 
         if (treeUri == null) {
@@ -43,13 +61,13 @@ public final class MusicLibraryScanner {
         DocumentFile root = DocumentFile.fromTreeUri(context, treeUri);
 
         if (root != null && root.isDirectory()) {
-            scanDocumentDirectory(context, root, songs);
+            scanDocumentDirectory(root, songs);
         }
 
         return songs;
     }
 
-    private static void scanFileDirectory(Context context, File directory, List<Track> songs) {
+    private void scanFileDirectory(File directory, List<Track> songs) {
         File[] entries = directory.listFiles();
 
         if (entries == null) {
@@ -58,12 +76,12 @@ public final class MusicLibraryScanner {
 
         for (File entry : entries) {
             if (entry.isDirectory()) {
-                scanFileDirectory(context, entry, songs);
+                scanFileDirectory(entry, songs);
             }
             else if (entry.isFile() && isAudioFile(entry.getName())) {
                 try {
                     Uri uri = Uri.fromFile(entry);
-                    Track info = MusicParser.parse(context, uri);
+                    Track info = MusicParser.parse(m_MainContext, uri);
                     songs.add(info);
                 }
                 catch (Exception e) {
@@ -73,17 +91,17 @@ public final class MusicLibraryScanner {
         }
     }
 
-    private static void scanDocumentDirectory(Context context, DocumentFile directory, List<Track> songs) {
+    private void scanDocumentDirectory(DocumentFile directory, List<Track> songs) {
         DocumentFile[] entries = directory.listFiles();
 
         for (DocumentFile entry : entries) {
             if (entry.isDirectory()) {
-                scanDocumentDirectory(context, entry, songs);
+                scanDocumentDirectory(entry, songs);
             }
             else if (entry.isFile() &&
                     isAudioFile(entry.getName())) {
                 try {
-                    Track info = MusicParser.parse(context, entry.getUri());
+                    Track info = MusicParser.parse(m_MainContext, entry.getUri());
 
                     songs.add(info);
                 }
