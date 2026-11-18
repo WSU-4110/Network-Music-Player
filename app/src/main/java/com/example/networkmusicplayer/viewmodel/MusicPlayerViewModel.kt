@@ -83,11 +83,12 @@ class MusicPlayerViewModel : ViewModel() {
     }
 
     fun playTrack(track: Track) {
-        val queue = _uiState.value.queue
+        val queue = if (_uiState.value.queue.isEmpty()) _uiState.value.allTracks else _uiState.value.queue
         val index = queue.indexOfFirst { it.id == track.id }.let { if (it >= 0) it else 0 }
 
         _uiState.update { state ->
             state.copy(
+                queue = queue,
                 currentTrack = track,
                 currentQueueIndex = index,
                 isPlaying = true,
@@ -278,13 +279,16 @@ class MusicPlayerViewModel : ViewModel() {
                 }
                 else server
             }
-            if (networkServer.isConnected)
-                state.copy(networkServers = updated,
-                    allTracks = (state.allTracks + networkServer.myTracks).sortedBy { it.id })
+            val newTracks = if (networkServer.isConnected)
+                (state.allTracks + networkServer.myTracks).sortedBy { it.id }
             else
-                state.copy(networkServers = updated,
-                    allTracks = (state.allTracks - networkServer.myTracks.toSet()).sortedBy { it.id }
-                )
+                (state.allTracks - networkServer.myTracks.toSet()).sortedBy { it.id }
+
+            state.copy(
+                networkServers = updated,
+                allTracks = newTracks,
+                queue = newTracks
+            )
         }
     }
 
@@ -299,9 +303,13 @@ class MusicPlayerViewModel : ViewModel() {
             try {
                 val server = NetworkServer.BuildFromDirectory(name, protocol, directory)
                 _uiState.update { state ->
-                    state.copy(networkServers = state.networkServers + server,
-                        allTracks = state.allTracks + server.myTracks,
-                        isLoading = false)
+                    val newTracks = state.allTracks + server.myTracks
+                    state.copy(
+                        networkServers = state.networkServers + server,
+                        allTracks = newTracks,
+                        queue = newTracks,
+                        isLoading = false
+                    )
                 }
             }
             catch (e: Exception) {

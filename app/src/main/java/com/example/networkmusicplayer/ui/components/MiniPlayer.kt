@@ -115,10 +115,13 @@ fun MiniPlayer(
 
                 // Controls
                 IconButton(
-                    //onClick = onPlayPauseClick,
                     onClick = {
-                        if (isPlaying) {onPauseClick()} else {onPlayClick()}
-                        onPlayPauseClick() },
+                        if (isPlaying) {
+                            onPauseClick()
+                        } else {
+                            onPlayClick()
+                        }
+                    },
                     modifier = Modifier
                         .size(38.dp)
                         .background(MaterialTheme.colorScheme.primaryContainer, CircleShape)

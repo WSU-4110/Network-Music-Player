@@ -96,6 +96,33 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun observePlayerState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState
+                    .map { Triple(it.currentQueueIndex, it.isPlaying, it.currentTrack) }
+                    .distinctUntilChanged()
+                    .collect { (index, isPlaying, track) ->
+                        if (track != null) {
+                            val currentPlayerIndex = player?.currentMediaItemIndex ?: -1
+                            if (currentPlayerIndex != index && index >= 0) {
+                                player?.seekToDefaultPosition(index)
+                            }
+                            if (isPlaying) {
+                                if (player?.isPlaying == false) {
+                                    player?.play()
+                                }
+                            } else {
+                                if (player?.isPlaying == true) {
+                                    player?.pause()
+                                }
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
     private fun addSongsToPlayer(allTracks: List<Track>) {
 
         if (allTracks.isEmpty()) return
@@ -123,8 +150,31 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         MusicLibraryScanner.Init(this.applicationContext)
         enableEdgeToEdge()
+
+        // Initialize ExoPlayer first
+        player = ExoPlayer.Builder(this).build()
+        player?.prepare()
+        player?.addListener(object : Player.Listener {
+            override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+                super.onMediaItemTransition(mediaItem, reason)
+                if (viewModel.uiState.value.isPlaying || viewModel.uiState.value.currentTrack != null) {
+                    player?.currentMediaItemIndex?.let { index ->
+                        val queue = viewModel.uiState.value.queue
+                        if (index >= 0 && index < queue.size) {
+                            val track = queue[index]
+                            if (viewModel.uiState.value.currentTrack?.id != track.id) {
+                                viewModel.playTrack(track)
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
         observeAudioFiles()
+        observePlayerState()
         checkAudioPermission()
+
         setContent {
             NetworkMusicPlayerTheme {
                 //Pass button functionality calls to NetworkMusicPlayerApp
@@ -137,26 +187,44 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
-        //Initialize ExoPlayer
-        player = ExoPlayer.Builder(this).build()
-        player?.prepare()
     }
 
     //functions for player buttons
     private fun playSong() {
-        player?.play()
+        val state = viewModel.uiState.value
+        if (state.currentTrack == null && state.queue.isNotEmpty()) {
+            viewModel.playTrack(state.queue.first())
+        } else {
+            player?.play()
+            if (!state.isPlaying) {
+                viewModel.togglePlayPause()
+            }
+        }
     }
 
     fun pauseSong() {
         player?.pause()
+        if (viewModel.uiState.value.isPlaying) {
+            viewModel.togglePlayPause()
+        }
     }
 
     fun nextSong() {
-        player?.seekToNextMediaItem()
+        viewModel.skipToNext()
+        val index = viewModel.uiState.value.currentQueueIndex
+        if (index >= 0) {
+            player?.seekToDefaultPosition(index)
+            player?.play()
+        }
     }
 
     fun prevSong() {
-        player?.seekToPreviousMediaItem()
+        viewModel.skipToPrevious()
+        val index = viewModel.uiState.value.currentQueueIndex
+        if (index >= 0) {
+            player?.seekToDefaultPosition(index)
+            player?.play()
+        }
     }
 
     //Cleanup player after the activity is destroyed

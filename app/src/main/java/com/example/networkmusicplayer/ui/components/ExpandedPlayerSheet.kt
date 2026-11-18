@@ -368,8 +368,12 @@ fun ExpandedPlayerSheet(
                     // Play / Pause Main Container Button
                     IconButton(
                         onClick = {
-                            if (isPlaying) {onPauseClick()} else {onPlayClick()}
-                            onPlayPauseClick() },
+                            if (isPlaying) {
+                                onPauseClick()
+                            } else {
+                                onPlayClick()
+                            }
+                        },
                         modifier = Modifier
                             .size(68.dp)
                             .background(MaterialTheme.colorScheme.primary, CircleShape)
