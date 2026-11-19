@@ -17,6 +17,7 @@ enum class NavTab {
 
 enum class LibraryFilter {
     ALL,
+    PLAYLISTS,
     FAVORITES,
     LOCAL,
     NETWORK
@@ -27,7 +28,6 @@ data class PlayerUiState(
     val isPlaying: Boolean = false,
     val progressMs: Long = 0L,
     val volume: Float = 0.8f,
-    val isShuffleEnabled: Boolean = false,
     val repeatMode: RepeatMode = RepeatMode.NONE,
     val queue: List<Track> = emptyList(),
     val currentQueueIndex: Int = 0,
@@ -42,6 +42,9 @@ data class PlayerUiState(
     val trebleBoost: Float = 0.5f,
     val networkServers: List<NetworkServer> = emptyList(),
     val allTracks: List<Track> = emptyList(),
-    val isLoading: Boolean = false
+    val playlists: List<Playlist> = emptyList(),
+    val selectedPlaylist: Playlist? = null,
+    val isCreatePlaylistDialogVisible: Boolean = false,
+    val trackToAddToPlaylist: Track? = null
 )
 

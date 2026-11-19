@@ -76,13 +76,11 @@ fun ExpandedPlayerSheet(
     isPlaying: Boolean,
     progressMs: Long,
     volume: Float,
-    isShuffleEnabled: Boolean,
     repeatMode: RepeatMode,
     onPlayPauseClick: () -> Unit,
     onNextClick: () -> Unit,
     onPreviousClick: () -> Unit,
     onSeek: (Long) -> Unit,
-    onShuffleToggle: () -> Unit,
     onRepeatToggle: () -> Unit,
     onFavoriteToggle: (Int) -> Unit,
     onVolumeChange: (Float) -> Unit,
@@ -342,16 +340,6 @@ fun ExpandedPlayerSheet(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    // Shuffle
-                    IconButton(onClick = onShuffleToggle) {
-                        Icon(
-                            imageVector = Icons.Default.Shuffle,
-                            contentDescription = "Shuffle",
-                            tint = if (isShuffleEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-
                     // Skip Previous
                     IconButton(
                         onClick = onPreviousClick,
@@ -461,13 +449,11 @@ fun ExpandedPlayerSheetPreview() {
             isPlaying = true,
             progressMs = 45000L,
             volume = 0.8f,
-            isShuffleEnabled = true,
             repeatMode = RepeatMode.ALL,
             onPlayPauseClick = {},
             onNextClick = {},
             onPreviousClick = {},
             onSeek = {},
-            onShuffleToggle = {},
             onRepeatToggle = {},
             onFavoriteToggle = {},
             onVolumeChange = {},
@@ -475,7 +461,7 @@ fun ExpandedPlayerSheetPreview() {
             onEqualizerClick = {},
             onDismiss = {},
             onPlayClick = {},
-            onPauseClick = {},
+            onPauseClick = {}
         )
     }
 }

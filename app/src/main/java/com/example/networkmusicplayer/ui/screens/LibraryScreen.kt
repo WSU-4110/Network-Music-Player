@@ -33,14 +33,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.networkmusicplayer.data.SampleData
+import androidx.compose.material.icons.filled.Add
 import com.example.networkmusicplayer.model.LibraryFilter
-import com.example.networkmusicplayer.filemanagement.Track
+import com.example.networkmusicplayer.model.Playlist
+import com.example.networkmusicplayer.model.Track
+import com.example.networkmusicplayer.ui.components.PlaylistCard
 import com.example.networkmusicplayer.ui.components.TrackListItem
 import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 
 @Composable
 fun LibraryScreen(
     tracks: List<Track>,
+    playlists: List<Playlist> = emptyList(),
     currentTrack: Track?,
     activeFilter: LibraryFilter,
     onFilterSelect: (LibraryFilter) -> Unit,
@@ -50,6 +54,14 @@ fun LibraryScreen(
     isPlaying: Boolean,
     onPlayClick: () -> Unit,
     onShuffleAll: () -> Unit,
+    onCreatePlaylistClick: () -> Unit = {},
+    onPlaylistSelect: (Playlist) -> Unit = {},
+    onPlayPlaylist: (String) -> Unit = {},
+    onShufflePlaylist: (String) -> Unit = {},
+    onDeletePlaylist: (String) -> Unit = {},
+    onAddToQueue: (Track) -> Unit = {},
+    onPlayNext: (Track) -> Unit = {},
+    onAddToPlaylist: (Track) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val filteredTracks = when (activeFilter) {
@@ -57,6 +69,7 @@ fun LibraryScreen(
         LibraryFilter.FAVORITES -> tracks.filter { it.isFavorite }
         LibraryFilter.LOCAL -> tracks.filter { !it.isNetworkTrack }
         LibraryFilter.NETWORK -> tracks.filter { it.isNetworkTrack }
+        LibraryFilter.PLAYLISTS -> emptyList()
     }
 
     Column(
@@ -72,9 +85,10 @@ fun LibraryScreen(
             items(LibraryFilter.entries) { filter ->
                 val label = when (filter) {
                     LibraryFilter.ALL -> "All Tracks (${tracks.size})"
-                    LibraryFilter.FAVORITES -> "Favorites ❤️"
+                    LibraryFilter.PLAYLISTS -> "Playlists (${playlists.size})"
+                    LibraryFilter.FAVORITES -> "Favorites"
                     LibraryFilter.LOCAL -> "Local Only"
-                    LibraryFilter.NETWORK -> "Network Streams 🌐"
+                    LibraryFilter.NETWORK -> "Network Streams"
                 }
                 FilterChip(
                     selected = activeFilter == filter,
@@ -90,74 +104,147 @@ fun LibraryScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Play All / Shuffle All Quick Actions
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Button(
-                onClick = {
-                    onPlayClick()
-                    onPlayAll() },
-                modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.PlayArrow,
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp)
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(text = "Play All", fontWeight = FontWeight.Bold)
-            }
-
-            OutlinedButton(
-                onClick = onShuffleAll,
-                modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Shuffle,
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp)
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(text = "Shuffle", fontWeight = FontWeight.Bold)
-            }
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        // Tracks List
-        if (filteredTracks.isEmpty()) {
-            Column(
+        if (activeFilter == LibraryFilter.PLAYLISTS) {
+            // Playlist Header Quick Action
+            Row(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(32.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "No tracks found in this category",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    text = "YOUR PLAYLISTS",
+                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.primary
                 )
+
+                Button(
+                    onClick = onCreatePlaylistClick,
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("New Playlist", fontWeight = FontWeight.Bold)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            if (playlists.isEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "No custom playlists created yet",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Tap 'New Playlist' above to create one",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                }
+            } else {
+                LazyColumn(
+                    contentPadding = PaddingValues(bottom = 120.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    items(playlists, key = { it.id }) { playlist ->
+                        PlaylistCard(
+                            playlist = playlist,
+                            onPlaylistClick = { onPlaylistSelect(playlist) },
+                            onPlayPlaylist = { onPlayPlaylist(playlist.id) },
+                            onShufflePlaylist = { onShufflePlaylist(playlist.id) },
+                            onDeletePlaylist = { onDeletePlaylist(playlist.id) }
+                        )
+                    }
+                }
             }
         } else {
-            LazyColumn(
-                contentPadding = PaddingValues(bottom = 120.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+            // Play All / Shuffle All Quick Actions
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(filteredTracks, key = { it.id }) { track ->
-                    TrackListItem(
-                        track = track,
-                        isPlayingCurrent = currentTrack?.id == track.id,
-                        onTrackClick = { onTrackSelect(track) },
-                        onFavoriteToggle = { onFavoriteToggle(track.id) }
+                Button(
+                    onClick = {
+                        onPlayClick()
+                        onPlayAll()
+                    },
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.PlayArrow,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
                     )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(text = "Play All", fontWeight = FontWeight.Bold)
+                }
+
+                OutlinedButton(
+                    onClick = onShuffleAll,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Shuffle,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(text = "Shuffle", fontWeight = FontWeight.Bold)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Tracks List
+            if (filteredTracks.isEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "No tracks found in this category",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            } else {
+                LazyColumn(
+                    contentPadding = PaddingValues(bottom = 120.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    items(filteredTracks, key = { it.id }) { track ->
+                        TrackListItem(
+                            track = track,
+                            isPlayingCurrent = currentTrack?.id == track.id,
+                            onTrackClick = { onTrackSelect(track) },
+                            onFavoriteToggle = { onFavoriteToggle(track.id) },
+                            onAddToQueue = { onAddToQueue(track) },
+                            onPlayNext = { onPlayNext(track) },
+                            onAddToPlaylist = { onAddToPlaylist(track) }
+                        )
+                    }
                 }
             }
         }

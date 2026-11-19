@@ -39,7 +39,10 @@ fun SearchScreen(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     onTrackSelect: (Track) -> Unit,
-    onFavoriteToggle: (Int) -> Unit,
+    onFavoriteToggle: (String) -> Unit,
+    onAddToQueue: (Track) -> Unit = {},
+    onPlayNext: (Track) -> Unit = {},
+    onAddToPlaylist: (Track) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val filteredTracks = if (searchQuery.isBlank()) {
@@ -132,7 +135,10 @@ fun SearchScreen(
                         track = track,
                         isPlayingCurrent = currentTrack?.id == track.id,
                         onTrackClick = { onTrackSelect(track) },
-                        onFavoriteToggle = { onFavoriteToggle(track.id) }
+                        onFavoriteToggle = { onFavoriteToggle(track.id) },
+                        onAddToQueue = { onAddToQueue(track) },
+                        onPlayNext = { onPlayNext(track) },
+                        onAddToPlaylist = { onAddToPlaylist(track) }
                     )
                 }
             }
