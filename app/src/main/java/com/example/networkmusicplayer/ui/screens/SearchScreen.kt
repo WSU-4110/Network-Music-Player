@@ -28,7 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.networkmusicplayer.data.SampleData
-import com.example.networkmusicplayer.model.Track
+import com.example.networkmusicplayer.filemanagement.Track
 import com.example.networkmusicplayer.ui.components.TrackListItem
 import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 
@@ -40,6 +40,9 @@ fun SearchScreen(
     onSearchQueryChange: (String) -> Unit,
     onTrackSelect: (Track) -> Unit,
     onFavoriteToggle: (String) -> Unit,
+    onAddToQueue: (Track) -> Unit = {},
+    onPlayNext: (Track) -> Unit = {},
+    onAddToPlaylist: (Track) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val filteredTracks = if (searchQuery.isBlank()) {
@@ -132,7 +135,10 @@ fun SearchScreen(
                         track = track,
                         isPlayingCurrent = currentTrack?.id == track.id,
                         onTrackClick = { onTrackSelect(track) },
-                        onFavoriteToggle = { onFavoriteToggle(track.id) }
+                        onFavoriteToggle = { onFavoriteToggle(track.id) },
+                        onAddToQueue = { onAddToQueue(track) },
+                        onPlayNext = { onPlayNext(track) },
+                        onAddToPlaylist = { onAddToPlaylist(track) }
                     )
                 }
             }

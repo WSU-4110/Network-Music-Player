@@ -39,14 +39,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.networkmusicplayer.data.SampleData
-import com.example.networkmusicplayer.model.NetworkServer
+import com.example.networkmusicplayer.filemanagement.NetworkServer
 import com.example.networkmusicplayer.ui.components.NetworkServerCard
 import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 
 @Composable
 fun NetworkScreen(
     servers: List<NetworkServer>,
-    onToggleServer: (String) -> Unit,
+    onToggleServer: (Int) -> Unit,
     onAddServer: (name: String, address: String, protocol: String) -> Unit,
     modifier: Modifier = Modifier
 ) {

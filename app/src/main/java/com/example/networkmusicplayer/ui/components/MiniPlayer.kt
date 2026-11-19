@@ -33,7 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.networkmusicplayer.model.Track
+import com.example.networkmusicplayer.filemanagement.Track
 
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.networkmusicplayer.data.SampleData
@@ -115,10 +115,13 @@ fun MiniPlayer(
 
                 // Controls
                 IconButton(
-                    //onClick = onPlayPauseClick,
                     onClick = {
-                        if (isPlaying) {onPauseClick()} else {onPlayClick()}
-                        onPlayPauseClick() },
+                        if (isPlaying) {
+                            onPauseClick()
+                        } else {
+                            onPlayClick()
+                        }
+                    },
                     modifier = Modifier
                         .size(38.dp)
                         .background(MaterialTheme.colorScheme.primaryContainer, CircleShape)

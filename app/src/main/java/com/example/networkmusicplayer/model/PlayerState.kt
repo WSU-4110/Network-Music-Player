@@ -1,5 +1,8 @@
 package com.example.networkmusicplayer.model
 
+import com.example.networkmusicplayer.filemanagement.NetworkServer
+import com.example.networkmusicplayer.filemanagement.Track
+
 enum class RepeatMode {
     NONE,
     ALL,
@@ -14,6 +17,7 @@ enum class NavTab {
 
 enum class LibraryFilter {
     ALL,
+    PLAYLISTS,
     FAVORITES,
     LOCAL,
     NETWORK
@@ -24,7 +28,6 @@ data class PlayerUiState(
     val isPlaying: Boolean = false,
     val progressMs: Long = 0L,
     val volume: Float = 0.8f,
-    val isShuffleEnabled: Boolean = false,
     val repeatMode: RepeatMode = RepeatMode.NONE,
     val queue: List<Track> = emptyList(),
     val currentQueueIndex: Int = 0,
@@ -38,6 +41,10 @@ data class PlayerUiState(
     val bassBoost: Float = 0.5f,
     val trebleBoost: Float = 0.5f,
     val networkServers: List<NetworkServer> = emptyList(),
-    val allTracks: List<Track> = emptyList()
+    val allTracks: List<Track> = emptyList(),
+    val playlists: List<Playlist> = emptyList(),
+    val selectedPlaylist: Playlist? = null,
+    val isCreatePlaylistDialogVisible: Boolean = false,
+    val trackToAddToPlaylist: Track? = null
 )
 

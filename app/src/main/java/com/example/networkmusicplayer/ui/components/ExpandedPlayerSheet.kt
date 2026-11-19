@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -59,12 +58,11 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.networkmusicplayer.model.RepeatMode
-import com.example.networkmusicplayer.model.Track
+import com.example.networkmusicplayer.filemanagement.Track
 
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.ui.tooling.preview.Preview
@@ -78,15 +76,13 @@ fun ExpandedPlayerSheet(
     isPlaying: Boolean,
     progressMs: Long,
     volume: Float,
-    isShuffleEnabled: Boolean,
     repeatMode: RepeatMode,
     onPlayPauseClick: () -> Unit,
     onNextClick: () -> Unit,
     onPreviousClick: () -> Unit,
     onSeek: (Long) -> Unit,
-    onShuffleToggle: () -> Unit,
     onRepeatToggle: () -> Unit,
-    onFavoriteToggle: (String) -> Unit,
+    onFavoriteToggle: (Int) -> Unit,
     onVolumeChange: (Float) -> Unit,
     onQueueClick: () -> Unit,
     onEqualizerClick: () -> Unit,
@@ -344,16 +340,6 @@ fun ExpandedPlayerSheet(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    // Shuffle
-                    IconButton(onClick = onShuffleToggle) {
-                        Icon(
-                            imageVector = Icons.Default.Shuffle,
-                            contentDescription = "Shuffle",
-                            tint = if (isShuffleEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-
                     // Skip Previous
                     IconButton(
                         onClick = onPreviousClick,
@@ -370,8 +356,12 @@ fun ExpandedPlayerSheet(
                     // Play / Pause Main Container Button
                     IconButton(
                         onClick = {
-                            if (isPlaying) {onPauseClick()} else {onPlayClick()}
-                            onPlayPauseClick() },
+                            if (isPlaying) {
+                                onPauseClick()
+                            } else {
+                                onPlayClick()
+                            }
+                        },
                         modifier = Modifier
                             .size(68.dp)
                             .background(MaterialTheme.colorScheme.primary, CircleShape)
@@ -459,13 +449,11 @@ fun ExpandedPlayerSheetPreview() {
             isPlaying = true,
             progressMs = 45000L,
             volume = 0.8f,
-            isShuffleEnabled = true,
             repeatMode = RepeatMode.ALL,
             onPlayPauseClick = {},
             onNextClick = {},
             onPreviousClick = {},
             onSeek = {},
-            onShuffleToggle = {},
             onRepeatToggle = {},
             onFavoriteToggle = {},
             onVolumeChange = {},
@@ -473,7 +461,7 @@ fun ExpandedPlayerSheetPreview() {
             onEqualizerClick = {},
             onDismiss = {},
             onPlayClick = {},
-            onPauseClick = {},
+            onPauseClick = {}
         )
     }
 }
