@@ -208,7 +208,8 @@ class MusicPlayerViewModel : ViewModel() {
         val state = _uiState.value
         if (state.queue.isEmpty()) return
 
-        val nextIndex = (state.currentQueueIndex + 1) % state.queue.size
+        var nextIndex = (state.currentQueueIndex + 1)
+        if (nextIndex >= state.queue.size) {nextIndex = 0}
         val nextTrack = state.queue[nextIndex]
         _uiState.update {
             it.copy(
