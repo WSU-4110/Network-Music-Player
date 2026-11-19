@@ -49,7 +49,7 @@ fun LibraryScreen(
     activeFilter: LibraryFilter,
     onFilterSelect: (LibraryFilter) -> Unit,
     onTrackSelect: (Track) -> Unit,
-    onFavoriteToggle: (String) -> Unit,
+    onFavoriteToggle: (Int) -> Unit,
     onPlayAll: () -> Unit,
     isPlaying: Boolean,
     onPlayClick: () -> Unit,

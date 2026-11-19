@@ -1,15 +1,17 @@
 package com.example.networkmusicplayer.viewmodel
 
+import android.os.Environment
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
-import com.example.networkmusicplayer.data.SampleData
+import com.example.networkmusicplayer.filemanagement.NetworkServer
+import com.example.networkmusicplayer.filemanagement.Track
 import com.example.networkmusicplayer.model.LibraryFilter
 import com.example.networkmusicplayer.model.NavTab
-import com.example.networkmusicplayer.model.NetworkServer
 import com.example.networkmusicplayer.model.PlayerUiState
 import com.example.networkmusicplayer.model.Playlist
 import com.example.networkmusicplayer.model.RepeatMode
-import com.example.networkmusicplayer.model.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +20,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
 import java.util.UUID
+import kotlin.collections.minus
+
 
 /**
  * MusicPlayerViewModel - Sprint 2 Player Buttons & Playlist Management
@@ -148,11 +155,12 @@ class MusicPlayerViewModel : ViewModel() {
      * Play Button Command: Plays a specific track and starts playback timer.
      */
     fun playTrack(track: Track) {
-        val queue = _uiState.value.queue
+        val queue = if (_uiState.value.queue.isEmpty()) _uiState.value.allTracks else _uiState.value.queue
         val index = queue.indexOfFirst { it.id == track.id }.let { if (it >= 0) it else 0 }
 
         _uiState.update { state ->
             state.copy(
+                queue = queue,
                 currentTrack = track,
                 currentQueueIndex = index,
                 isPlaying = true,
@@ -256,18 +264,30 @@ class MusicPlayerViewModel : ViewModel() {
         }
     }
 
-    fun toggleFavorite(trackId: String) {
+    fun toggleFavorite(trackId: Int) {
         _uiState.update { state ->
             val updatedAll = state.allTracks.map {
-                if (it.id == trackId) it.copy(isFavorite = !it.isFavorite) else it
+                if (it.id == trackId) {
+                    it.isFavorite = !it.isFavorite
+                    it.copy()
+                }
+                else it
             }
+
             val updatedQueue = state.queue.map {
-                if (it.id == trackId) it.copy(isFavorite = !it.isFavorite) else it
+                if (it.id == trackId) {
+                    it.isFavorite = !it.isFavorite
+                    it.copy()
+                }
+                else it
             }
+
             val updatedCurrent = if (state.currentTrack?.id == trackId) {
-                state.currentTrack.copy(isFavorite = !state.currentTrack.isFavorite)
-            } else {
-                state.currentTrack
+                state.currentTrack.isFavorite = !state.currentTrack.isFavorite
+                state.currentTrack.copy()
+            }
+            else {
+                state.currentTrack?.copy()
             }
 
             state.copy(
@@ -536,27 +556,62 @@ class MusicPlayerViewModel : ViewModel() {
     }
 
     fun addNetworkServer(name: String, address: String, protocol: String) {
-        val newServer = NetworkServer(
-            id = UUID.randomUUID().toString(),
-            name = name.ifBlank { "Custom Network Stream" },
-            protocol = protocol.ifBlank { "HTTP/HTTPS Stream" },
-            address = address.ifBlank { "http://localhost:8080" },
-            isConnected = true,
-            trackCount = (10..500).random()
-        )
-        _uiState.update { state ->
-            state.copy(networkServers = state.networkServers + newServer)
-        }
+        val file = File(address)
+        if (!file.exists() || !file.isDirectory)
+            return
+
+        scanAudioFiles(name, protocol, file)
     }
 
-    fun toggleServerConnection(serverId: String) {
+    fun toggleServerConnection(serverId: Int) {
+        var networkServer = NetworkServer()
         _uiState.update { state ->
             val updated = state.networkServers.map { server ->
                 if (server.id == serverId) {
-                    server.copy(isConnected = !server.isConnected)
-                } else server
+                    server.isConnected = !server.isConnected
+                    networkServer = server
+                    server.copy()
+                }
+                else server
             }
-            state.copy(networkServers = updated)
+            val newTracks = if (networkServer.isConnected)
+                (state.allTracks + networkServer.myTracks).sortedBy { it.id }
+            else
+                (state.allTracks - networkServer.myTracks.toSet()).sortedBy { it.id }
+
+            state.copy(
+                networkServers = updated,
+                allTracks = newTracks,
+                queue = newTracks
+            )
+        }
+    }
+
+    fun scanAudioFiles(name: String, protocol: String, directory: File) {
+        if (_uiState.value.isLoading)
+            return
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isLoading = true)
+            }
+
+            try {
+                val server = NetworkServer.BuildFromDirectory(name, protocol, directory)
+                _uiState.update { state ->
+                    val newTracks = state.allTracks + server.myTracks
+                    state.copy(
+                        networkServers = state.networkServers + server,
+                        allTracks = newTracks,
+                        queue = newTracks,
+                        isLoading = false
+                    )
+                }
+            }
+            catch (e: Exception) {
+                _uiState.update {
+                    it.copy(isLoading = false)
+                }
+            }
         }
     }
 }

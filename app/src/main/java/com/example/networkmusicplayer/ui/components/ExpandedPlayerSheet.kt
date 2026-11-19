@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -59,12 +58,11 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.networkmusicplayer.model.RepeatMode
-import com.example.networkmusicplayer.model.Track
+import com.example.networkmusicplayer.filemanagement.Track
 
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.ui.tooling.preview.Preview
@@ -84,7 +82,7 @@ fun ExpandedPlayerSheet(
     onPreviousClick: () -> Unit,
     onSeek: (Long) -> Unit,
     onRepeatToggle: () -> Unit,
-    onFavoriteToggle: (String) -> Unit,
+    onFavoriteToggle: (Int) -> Unit,
     onVolumeChange: (Float) -> Unit,
     onQueueClick: () -> Unit,
     onEqualizerClick: () -> Unit,
@@ -358,8 +356,12 @@ fun ExpandedPlayerSheet(
                     // Play / Pause Main Container Button
                     IconButton(
                         onClick = {
-                            if (isPlaying) {onPauseClick()} else {onPlayClick()}
-                            onPlayPauseClick() },
+                            if (isPlaying) {
+                                onPauseClick()
+                            } else {
+                                onPlayClick()
+                            }
+                        },
                         modifier = Modifier
                             .size(68.dp)
                             .background(MaterialTheme.colorScheme.primary, CircleShape)
