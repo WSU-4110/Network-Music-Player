@@ -50,6 +50,8 @@ fun NetworkMusicPlayerApp(
     onPauseSong: () -> Unit = {},
     onNextSong: () -> Unit = {},
     onPrevSong: () -> Unit = {},
+    onNetworkClick: () -> Unit = {},
+    onUpdateClick: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -88,7 +90,7 @@ fun NetworkMusicPlayerApp(
                 ) {
                     NavigationBarItem(
                         selected = uiState.activeTab == NavTab.LIBRARY,
-                        onClick = { viewModel.setNavTab(NavTab.LIBRARY) },
+                        onClick = { viewModel.setNavTab(NavTab.LIBRARY); onUpdateClick() },
                         icon = { Icon(Icons.Default.LibraryMusic, contentDescription = "Library") },
                         label = { Text("Library") },
                         colors = NavigationBarItemDefaults.colors(
@@ -99,7 +101,7 @@ fun NetworkMusicPlayerApp(
 
                     NavigationBarItem(
                         selected = uiState.activeTab == NavTab.NETWORK,
-                        onClick = { viewModel.setNavTab(NavTab.NETWORK) },
+                        onClick = { viewModel.setNavTab(NavTab.NETWORK); onNetworkClick() },
                         icon = { Icon(Icons.Default.CloudQueue, contentDescription = "Network Hub") },
                         label = { Text("Network") },
                         colors = NavigationBarItemDefaults.colors(

@@ -3,7 +3,8 @@ package com.example.networkmusicplayer.ui.smb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.networkmusicplayer.model.SmbConfig
-import com.example.networkmusicplayer.data.repository.ReadOnlySmbRepository
+//import com.example.networkmusicplayer.data.repository.ReadOnlySmbRepository
+import com.example.networkmusicplayer.filemanagement.ReadOnlySmbRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

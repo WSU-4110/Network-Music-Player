@@ -51,7 +51,7 @@ fun QueueBottomSheet(
     queue: List<Track>,
     currentQueueIndex: Int,
     onTrackSelect: (Track) -> Unit,
-    onRemoveTrack: (String) -> Unit,
+    onRemoveTrack: (Int) -> Unit,
     onClearQueue: () -> Unit,
     onMoveUp: (Int) -> Unit,
     onMoveDown: (Int) -> Unit,

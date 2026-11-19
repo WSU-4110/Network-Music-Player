@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
+import com.example.networkmusicplayer.data.SampleData
 import com.example.networkmusicplayer.filemanagement.NetworkServer
 import com.example.networkmusicplayer.filemanagement.Track
 import com.example.networkmusicplayer.model.LibraryFilter
@@ -362,7 +363,7 @@ class MusicPlayerViewModel : ViewModel() {
         }
     }
 
-    fun removeFromQueue(trackId: String) {
+    fun removeFromQueue(trackId: Int) {
         _uiState.update { state ->
             val updatedQueue = state.queue.filter { it.id != trackId }
             val newIndex = if (updatedQueue.isEmpty()) 0 else state.currentQueueIndex.coerceAtMost(updatedQueue.size - 1)
@@ -480,7 +481,17 @@ class MusicPlayerViewModel : ViewModel() {
     /**
      * Removes a song/track from a specific playlist.
      */
-    fun removeTrackFromPlaylist(playlistId: String, trackId: String) {
+    fun updateScreen(songs: List<Track>)
+    {
+        val firstTrack = songs.firstOrNull()
+        _uiState.update { state ->
+            state.copy(
+                allTracks = songs,
+                queue = songs,
+                currentTrack = firstTrack,)
+        }
+    }
+    fun removeTrackFromPlaylist(playlistId: String, trackId: Int) {
         _uiState.update { state ->
             val updatedPlaylists = state.playlists.map { playlist ->
                 if (playlist.id == playlistId) {

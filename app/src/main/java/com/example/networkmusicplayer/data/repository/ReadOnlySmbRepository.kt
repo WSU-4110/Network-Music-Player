@@ -1,4 +1,4 @@
-package com.example.networkmusicplayer.data.repository
+package com.example.networkmusicplayer.filemanagement
 
 import com.hierynomus.msdtyp.AccessMask
 import com.hierynomus.mssmb2.SMB2CreateDisposition
@@ -7,6 +7,7 @@ import com.hierynomus.smbj.SMBClient
 import com.hierynomus.smbj.auth.AuthenticationContext
 import com.hierynomus.smbj.share.DiskShare
 import com.example.networkmusicplayer.model.SmbConfig
+import com.example.networkmusicplayer.filemanagement.MusicLibraryScanner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File

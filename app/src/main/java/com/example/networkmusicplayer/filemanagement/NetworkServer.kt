@@ -1,17 +1,16 @@
 package com.example.networkmusicplayer.filemanagement
 
-import android.content.Context
 import java.io.File
 
-class NetworkServer {
-    var id: Int = -1
-    var name: String = "None"
-    var protocol: String = "Local" // e.g., "HTTP/HTTPS", "SMB/NAS", "DLNA/UPnP"
-    var address: String = ""
-    var isConnected: Boolean = true
-    var myTracks: List<Track> = emptyList()
+class NetworkServer(
+    var id: Int = -1,
+    var name: String = "None",
+    var protocol: String = "Local", // e.g., "HTTP/HTTPS", "SMB/NAS", "DLNA/UPnP"
+    var address: String = "",
+    var isConnected: Boolean = true,
+    var myTracks: List<Track> = emptyList(),
     var trackCount: Int = 0
-
+) {
     fun copy() : NetworkServer {
         val server = NetworkServer()
         server.id = this.id

@@ -36,7 +36,7 @@ import com.example.networkmusicplayer.data.SampleData
 import androidx.compose.material.icons.filled.Add
 import com.example.networkmusicplayer.model.LibraryFilter
 import com.example.networkmusicplayer.model.Playlist
-import com.example.networkmusicplayer.model.Track
+import com.example.networkmusicplayer.filemanagement.Track
 import com.example.networkmusicplayer.ui.components.PlaylistCard
 import com.example.networkmusicplayer.ui.components.TrackListItem
 import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
@@ -257,7 +257,7 @@ fun LibraryScreenPreview() {
     NetworkMusicPlayerTheme {
         LibraryScreen(
             tracks = SampleData.sampleTracks,
-            currentTrack = SampleData.sampleTracks.first(),
+            currentTrack = SampleData.sampleTracks.firstOrNull(),
             activeFilter = LibraryFilter.ALL,
             onFilterSelect = {},
             onTrackSelect = {},

@@ -39,7 +39,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.networkmusicplayer.data.SampleData
 import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 
-import androidx.compose.material.icons.filled.PlaylistAdd
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.QueuePlayNext
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -229,7 +230,7 @@ fun TrackListItem(
                                 },
                                 leadingIcon = {
                                     Icon(
-                                        imageVector = Icons.Default.PlaylistAdd,
+                                        imageVector = Icons.AutoMirrored.Filled.PlaylistAdd,
                                         contentDescription = null,
                                         modifier = Modifier.size(18.dp)
                                     )

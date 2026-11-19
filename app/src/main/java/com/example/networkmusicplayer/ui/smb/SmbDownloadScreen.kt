@@ -11,9 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import java.io.File
 
 @Composable
-fun SmbDownloadScreen(viewModel: SmbViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+fun SmbDownloadScreen(
+    viewModel: SmbViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
@@ -74,6 +77,7 @@ fun SmbDownloadScreen(viewModel: SmbViewModel = androidx.lifecycle.viewmodel.com
                         // Saves directly to app-specific external downloads folder
                         val downloadDir = context.getExternalFilesDir(android.os.Environment.DIRECTORY_DOWNLOADS) ?: context.filesDir
                         viewModel.downloadFile(currentConfig, fileName, downloadDir)
+
                     }
                 )
             }

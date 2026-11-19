@@ -39,7 +39,7 @@ fun SearchScreen(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     onTrackSelect: (Track) -> Unit,
-    onFavoriteToggle: (String) -> Unit,
+    onFavoriteToggle: (Int) -> Unit,
     onAddToQueue: (Track) -> Unit = {},
     onPlayNext: (Track) -> Unit = {},
     onAddToPlaylist: (Track) -> Unit = {},
@@ -152,7 +152,7 @@ fun SearchScreenPreview() {
     NetworkMusicPlayerTheme {
         SearchScreen(
             tracks = SampleData.sampleTracks,
-            currentTrack = SampleData.sampleTracks.first(),
+            currentTrack = SampleData.sampleTracks.firstOrNull(),
             searchQuery = "chill",
             onSearchQueryChange = {},
             onTrackSelect = {},

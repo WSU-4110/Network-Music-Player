@@ -45,6 +45,7 @@ data class PlayerUiState(
     val playlists: List<Playlist> = emptyList(),
     val selectedPlaylist: Playlist? = null,
     val isCreatePlaylistDialogVisible: Boolean = false,
-    val trackToAddToPlaylist: Track? = null
+    val trackToAddToPlaylist: Track? = null,
+    val isLoading: Boolean = false
 )
 

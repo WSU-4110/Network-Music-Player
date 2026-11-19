@@ -2,39 +2,38 @@ package com.example.networkmusicplayer
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.networkmusicplayer.ui.NetworkMusicPlayerApp
-import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
-import androidx.media3.datasource.RawResourceDataSource
-import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
 import com.example.networkmusicplayer.filemanagement.MusicLibraryScanner
-import com.example.networkmusicplayer.filemanagement.NetworkServer
 import com.example.networkmusicplayer.filemanagement.Track
+import com.example.networkmusicplayer.ui.NetworkMusicPlayerApp
+import com.example.networkmusicplayer.ui.smb.SmbDownloadScreen
+import com.example.networkmusicplayer.ui.theme.NetworkMusicPlayerTheme
 import com.example.networkmusicplayer.viewmodel.MusicPlayerViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -146,6 +145,16 @@ class MainActivity : ComponentActivity() {
         Log.d("NMP", "Added songs to player");
     }
 
+    private fun updateLibrary()
+    {
+        val downloadDir = File("/storage/emulated/0/Android/data/com.example.networkmusicplayer/files/Download")
+        val scanner = MusicLibraryScanner.getInstance()
+        val songs: List<Track> = scanner.scanDirectory(downloadDir)
+        addSongsToPlayer(songs)
+        viewModel.updateScreen(songs)
+        val hi = 2
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MusicLibraryScanner.Init(this.applicationContext)
@@ -178,16 +187,21 @@ class MainActivity : ComponentActivity() {
         setContent {
             NetworkMusicPlayerTheme {
                 //Pass button functionality calls to NetworkMusicPlayerApp
+
                 NetworkMusicPlayerApp(
                     viewModel = viewModel,
                     onPlaySong = { playSong() },
                     onPauseSong = { pauseSong() },
                     onNextSong = { nextSong() },
-                    onPrevSong = { prevSong() }
+                    onPrevSong = { prevSong() },
+                    onUpdateClick = { updateLibrary() }
+
                 )
+
             }
         }
     }
+    
 
     //functions for player buttons
     private fun playSong() {
