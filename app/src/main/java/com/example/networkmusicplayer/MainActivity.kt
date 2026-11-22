@@ -145,6 +145,7 @@ class MainActivity : ComponentActivity() {
         Log.d("NMP", "Added songs to player");
     }
 
+    //For Sprint 2 Presentation, scans downloads folder on click of library page button
     private fun updateLibrary()
     {
         val downloadDir = File("/storage/emulated/0/Android/data/com.example.networkmusicplayer/files/Download")
